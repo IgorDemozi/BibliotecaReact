@@ -1,0 +1,61 @@
+body {
+   margin: 0;
+   display: flex;
+   justify-content: center;
+   padding: 12vh 0;
+   background-image: url(../imagens/emil-widlund-xrbbXIXAWY0-unsplash.png);
+   background-position-y: 65%;
+   font-family: 'Roboto', sans-serif;
+}
+
+.form {
+   background-color: white;
+   width: 370px;
+   height: 385px;
+   border-radius: 5px;
+   padding: 2.5em;
+   box-shadow: 0 0 0 1000px rgba(60, 60, 60, 0.6);
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+}
+
+.logo {
+   margin: 0 auto 2rem auto;
+   transform: scale(1.3);
+}
+
+.loginCampos {
+   background-color: #F1F3F5;
+   padding: 1.5em;
+   border-radius: 5px;
+   border: 0;
+   font: 14px Roboto;
+}
+
+.campoEmail {
+   background-image: url(../../imagens/Grupo\ 37.svg);
+   background-repeat: no-repeat;
+   background-position: 94%;
+}
+
+.campoSenha {
+   background-image: url(../../imagens/Grupo\ 36.svg);
+   background-repeat: no-repeat;
+   background-position: 94%;
+}
+
+.esqueceu {
+   color: black;
+   font: normal normal bold 14px/19px Roboto;
+}
+
+.loginBotao {
+   padding: 1rem 2rem;
+   border-radius: 5px;
+   border: 0;
+   background-color: #FFC501;
+   text-transform: uppercase;
+   font: normal normal bold 16px/21px Roboto;
+   cursor: pointer;
+}

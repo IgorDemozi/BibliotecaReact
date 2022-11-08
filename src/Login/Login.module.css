@@ -1,8 +1,7 @@
 body {
    margin: 0;
-   display: flex;
-   justify-content: center;
-   padding: 12vh 0;
+   /* display: flex;
+   justify-content: center; */
    background-image: url(../imagens/emil-widlund-xrbbXIXAWY0-unsplash.png);
    background-position-y: 65%;
    font-family: 'Roboto', sans-serif;
@@ -13,6 +12,7 @@ body {
    width: 370px;
    height: 385px;
    border-radius: 5px;
+   margin: 12vh 0;
    padding: 2.5em;
    box-shadow: 0 0 0 1000px rgba(60, 60, 60, 0.6);
    display: flex;
@@ -34,13 +34,13 @@ body {
 }
 
 .campoEmail {
-   background-image: url(../../imagens/Grupo\ 37.svg);
+   background-image: url(../imagens/Grupo\ 37.svg);
    background-repeat: no-repeat;
    background-position: 94%;
 }
 
 .campoSenha {
-   background-image: url(../../imagens/Grupo\ 36.svg);
+   background-image: url(../imagens/Grupo\ 36.svg);
    background-repeat: no-repeat;
    background-position: 94%;
 }

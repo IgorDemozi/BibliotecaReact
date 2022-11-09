@@ -1,0 +1,8 @@
+.cadastroLink {
+   text-decoration: none;
+   color: #343A40;
+}
+
+.seta {
+   transform: translateY(2px);
+}

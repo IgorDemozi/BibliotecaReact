@@ -1,10 +1,11 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ReactComponent as Logo } from '../imagens/Logo.svg'
-import Button from '../componentes/Button'
-import Input from '../componentes/Input'
+import Button from '../Componentes/Button'
+import Input from '../Componentes/Input'
 import styles from './Login.module.css'
 import dados from '../data.json'
+// import { ContainerBg } from './styles'
 
 const Login = () => {
 
@@ -34,22 +35,24 @@ const Login = () => {
    }
 
    return (
-      <form className={styles.form} onSubmit={handleSubmit}>
-         <Logo className={styles.logo} alt='Logotipo da biblioteca' />
+      <div className={styles.container}>
+         <form className={styles.form} onSubmit={handleSubmit}>
+            <Logo className={styles.logo} alt='Logotipo da biblioteca' />
 
-         <Input
-            className={`${styles.loginCampos} ${styles.campoEmail}`}
-            type='email' placeholder='Email' value={email} onChange={teste}
-         />
+            <Input
+               className={`${styles.loginCampos} ${styles.campoEmail}`}
+               type='email' placeholder='Email' value={email} onChange={teste}
+            />
 
-         <Input
-            className={`${styles.loginCampos} ${styles.campoSenha}`}
-            type='password' placeholder='Senha' value={senha} onChange={teste}
-         />
+            <Input
+               className={`${styles.loginCampos} ${styles.campoSenha}`}
+               type='password' placeholder='Senha' value={senha} onChange={teste}
+            />
 
-         <Link className={styles.esqueceu} to='/'>Esqueci minha senha</Link>
-         <Button className={styles.loginBotao}>Entrar</Button>
-      </form>
+            <Link className={styles.esqueceu} to='/home'>Esqueci minha senha</Link>
+            <Button className={styles.loginBotao}>Entrar</Button>
+         </form>
+      </div>
    )
 }
 

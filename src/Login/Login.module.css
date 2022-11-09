@@ -1,13 +1,15 @@
-body {
+.container {
    margin: 0;
-   /* display: flex;
-   justify-content: center; */
+   display: flex;
+   justify-content: center;
+   align-items: center;
    background-image: url(../imagens/emil-widlund-xrbbXIXAWY0-unsplash.png);
    background-position-y: 65%;
-   font-family: 'Roboto', sans-serif;
+   height: 100vh;
 }
 
 .form {
+   margin: 0;
    background-color: white;
    width: 370px;
    height: 385px;

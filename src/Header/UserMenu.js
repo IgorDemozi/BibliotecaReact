@@ -11,14 +11,16 @@ const UserMenu = () => {
    const navigate = useNavigate();
 
    React.useEffect(() => {
-      if (localStorage.getItem("atual-usuario") === null) {
+      if (localStorage.getItem("atual-usuario") === "null") {
          navigate('/');
+      } else {
+         setUsuario(localStorage.getItem("atual-usuario"));
       }
-      setUsuario(localStorage.getItem("atual-usuario"));
-   }, [navigate])
+   }, [navigate]);
 
    function logout() {
       localStorage.setItem('atual-usuario', null);
+      setAtivado(false);
       navigate('/');
    }
 

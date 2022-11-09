@@ -9,9 +9,9 @@ const Main = () => {
    return (
       <section className={styles.main}>
          <div className={styles.cardsDiv}>
-            <Card txt='Cadastrar novo Livro'><ImgCadastro /></Card>
-            <Card txt='Biblioteca'><ImgBiblioteca /></Card>
-            <Card txt='Histórico de Empréstimos'><ImgEmprestimos /></Card>
+            <Card txt='Cadastrar novo Livro' rota='/cadastro'><ImgCadastro /></Card>
+            <Card txt='Biblioteca' rota='/biblioteca'><ImgBiblioteca /></Card>
+            <Card txt='Histórico de Empréstimos' rota='/emprestimos'><ImgEmprestimos /></Card>
          </div>
       </section>
    )

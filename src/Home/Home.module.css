@@ -1,6 +1,5 @@
-/* body {
-   margin: 0;
+.mainContainer {
    background-color: #F4F4F4;
-   display: flex;
+   padding-bottom: 1px;
    font-family: 'Roboto', sans-serif;
-} */
+}

@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Select = ({ generos }) => {
+const Select = ({ genero, generos, onChange, className }) => {
    return (
-      <select>
-         <option value>Selecione um gênero</option>
+      <select value={genero} onChange={onChange} className={className}>
+         <option value={''} >Selecione um gênero</option>
          {generos.map((item) =>
-            <option value={item}>{item}</option>
+            <option key={item} value={item}>{item}</option>
          )}
       </select>
    )

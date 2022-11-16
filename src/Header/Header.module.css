@@ -20,6 +20,10 @@
    height: 30px;
 }
 
+.userMenu p {
+   margin: 0;
+}
+
 .sair {
    background-color: #F4F4F4;
    border-radius: 4px;

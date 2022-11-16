@@ -1,8 +1,14 @@
 import React from 'react'
+import Header from '../Header/Header'
+import { MainContainer } from '../styles'
+import EmprestimosForm from './EmprestimosForm'
 
 const Emprestimos = () => {
    return (
-      <div>Emprestimos</div>
+      <MainContainer>
+         <Header />
+         <EmprestimosForm />
+      </MainContainer>
    )
 }
 

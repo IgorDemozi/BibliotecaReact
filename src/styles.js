@@ -1,10 +1,62 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import SetaBaixo  from './imagens/Poligono_4.svg'
+import SetaBaixo from './imagens/Poligono_4.svg';
+import Filtro from './imagens/Caminho_147.svg';
 import Input from './Componentes/Input';
 import Select from './Componentes/Select';
 import Button from './Componentes/Button';
-import { ReactComponent as Seta } from './imagens/chevron_left_FILL0_wght400_GRAD0_opsz48.svg'
+import { ReactComponent as Seta } from './imagens/chevron_left_FILL0_wght400_GRAD0_opsz48.svg';
+
+export const TabelaInput = styled(Input)`
+   border: none;
+   border-bottom: 2px solid black;
+   width: 110px;
+   background-image: url(${Filtro});
+   background-repeat: no-repeat;
+   background-position: 2% 1%;
+   background-size: 1.3em;
+   padding-left: 2em;
+
+   :focus {
+      outline: none;
+   }
+`
+
+export const Tabela = styled.table`
+   border-collapse: collapse;
+   width: 90%;
+   margin: 1.5rem;
+
+   th {
+   background: #FFC501;
+   height: 2em;
+   text-align: left;
+   padding-left: 2em;
+   }
+
+   tr th:nth-child(1) {
+      border-radius: 5px 1px 1px 1px;
+   }
+
+   tr th:last-child {
+      border-radius: 1px 5px 1px 1px;
+   }
+
+   td {
+      border-bottom: 1px solid #CDCDCD;
+      padding: 10px;
+      text-align: left;
+      padding-left: 2em;
+   }
+
+   tbody tr:last-child td {
+      border-bottom: none;
+   }
+
+   p {
+      margin: 0;
+   }
+`
 
 export const Imagem = styled.img`
    width: 100%;

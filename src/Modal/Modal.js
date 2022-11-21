@@ -1,0 +1,52 @@
+import React, { useState } from 'react'
+import { ModalPrincipal } from '../styles'
+import ModalEmprestar from './ModalEmprestar';
+import ModalHistorico from './ModalHistorico';
+import ModalInativar from './ModalInativar';
+import ModalLivro from './ModalLivro';
+
+const Modal = ({ setModalAtivado, livro, index }) => {
+   const [modalLivroAtivado, setModalLivroAtivado] = useState(true);
+   const [emprestarAtivado, setEmprestarAtivado] = useState(false);
+   const [inativarAtivado, setInativarAtivado] = useState(false);
+   const [historicoAtivado, setHistoricoAtivado] = useState(false);
+
+   function clicarFora(event) {
+      if (event.target === event.currentTarget) {
+         setModalAtivado(false);
+      }
+   }
+
+   return (
+      <ModalPrincipal onClick={clicarFora}>
+         {modalLivroAtivado && <ModalLivro
+            livro={livro}
+            setModalLivroAtivado={setModalLivroAtivado}
+            setModalAtivado={setModalAtivado}
+            setEmprestarAtivado={setEmprestarAtivado}
+            setInativarAtivado={setInativarAtivado}
+            setHistoricoAtivado={setHistoricoAtivado} />
+         }
+
+         {emprestarAtivado && <ModalEmprestar
+            index={index}
+            setEmprestarAtivado={setEmprestarAtivado}
+            setModalLivroAtivado={setModalLivroAtivado} />
+         }
+
+         {inativarAtivado && <ModalInativar
+            index={index}
+            setInativarAtivado={setInativarAtivado}
+            setModalLivroAtivado={setModalLivroAtivado} />
+         }
+
+         {historicoAtivado && <ModalHistorico
+            index={index}
+            setHistoricoAtivado={setHistoricoAtivado}
+            setModalLivroAtivado={setModalLivroAtivado} />
+         }
+      </ModalPrincipal>
+   )
+}
+
+export default Modal

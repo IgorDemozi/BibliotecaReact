@@ -78,18 +78,18 @@ const EmprestimosForm = () => {
                            return (
                               <React.Fragment key={i}>
                                  {element.studentName.toLowerCase().includes(aluno.toLowerCase()) &&
-                                  element.class.toLowerCase().includes(turma.toLowerCase()) &&
-                                  item.title.toLowerCase().includes(livro.toLowerCase()) &&
-                                  element.withdrawalDate.toLowerCase().includes(retirada.toLowerCase()) &&
-                                  element.deliveryDate.toLowerCase().includes(entrega.toLowerCase()) ?
+                                    element.class.toLowerCase().includes(turma.toLowerCase()) &&
+                                    item.title.toLowerCase().includes(livro.toLowerCase()) &&
+                                    element.withdrawalDate.toLowerCase().includes(retirada.toLowerCase()) &&
+                                    element.deliveryDate.toLowerCase().includes(entrega.toLowerCase()) ?
                                     <tr>
                                        <td><p>{element.studentName}</p></td>
                                        <td><p>{element.class}</p></td>
                                        <td><p>{item.title}</p></td>
                                        <td><p>{element.withdrawalDate}</p></td>
                                        <td><p>{element.deliveryDate}</p></td>
-                                    </tr> 
-                                 : null}
+                                    </tr>
+                                    : null}
                               </React.Fragment>
                            )
                         })

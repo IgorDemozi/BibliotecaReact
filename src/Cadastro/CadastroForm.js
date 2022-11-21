@@ -149,7 +149,7 @@ const CadastroForm = () => {
 
                <div>
                   <InputCadastro type='text' placeholder='Autor' value={autor} onChange={setValores} />
-                  <SelectCadastro className='select' genero={genero} generos={generos} onChange={setValGenero} />
+                  <SelectCadastro opcaoNeutra='Selecione um gênero' className='select' value={genero} options={generos} onChange={setValGenero} />
                   <InputCadastro type='date' value={data} onChange={setValores} />
                </div>
             </div>

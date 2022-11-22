@@ -21,6 +21,7 @@ const Modal = ({ setModalAtivado, livro, index }) => {
       <ModalPrincipal onClick={clicarFora}>
          {modalLivroAtivado && <ModalLivro
             livro={livro}
+            index={index}
             setModalLivroAtivado={setModalLivroAtivado}
             setModalAtivado={setModalAtivado}
             setEmprestarAtivado={setEmprestarAtivado}
@@ -41,7 +42,7 @@ const Modal = ({ setModalAtivado, livro, index }) => {
          }
 
          {historicoAtivado && <ModalHistorico
-            index={index}
+            livro={livro}
             setHistoricoAtivado={setHistoricoAtivado}
             setModalLivroAtivado={setModalLivroAtivado} />
          }

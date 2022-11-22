@@ -9,6 +9,64 @@ import { Link } from 'react-router-dom';
 import { ReactComponent as Seta } from './imagens/chevron_left_FILL0_wght400_GRAD0_opsz48.svg';
 import { ReactComponent as Lupa } from './imagens/Caminho_263.svg';
 
+export const MenuHistorico = styled.section`
+   background-color: white;
+   width: fit-content;
+   height: fit-content;
+   padding: 2em;
+`
+
+export const InativadoInfoSection = styled.section`
+   width: 100%;
+   height: fit-content;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   flex-wrap: wrap;
+
+   h1 {
+      text-align: left;
+      margin-bottom: 0.5rem;
+   }
+
+   p {
+      margin-top: 0.3rem;
+      font-size: 16px;
+      font-family: Roboto;
+      color: #3E4756;
+   }
+
+   div {
+      background-color: #F4F4F4;
+      height: 80px;
+      padding: 0.5rem;
+   }
+`
+
+export const MenuInativar = styled.section`
+   background-color: white;
+   width: 580px;
+   height: 200px;
+   padding: 2rem;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   gap: 1rem;
+
+   textarea {
+      height: 100px;
+      border: 1px solid #133052;
+      border-radius: 5px;
+      padding: 0.8rem;
+      resize: none;
+      font: normal normal normal 16px/21px Roboto;
+   }
+
+   button {
+      align-self: flex-end;
+   }
+`
+
 export const MenuEmprestar = styled.section`
    background-color: white;
    width: 650px;
@@ -36,7 +94,7 @@ export const InfoBtSection = styled.section`
    flex-direction: column;
    justify-content: space-between;
 `
-export const DivFecharEmprestimo = styled.div`
+export const DivFechar = styled.div`
    width: 100%;
    height: 1rem;
    display: flex;
@@ -56,7 +114,7 @@ export const DivFecharEmprestimo = styled.div`
    }
 `
 
-export const DivFechar = styled.div`
+export const DivFecharSimples = styled.div`
    width: 100%;
    height: 1rem;
    display: flex;
@@ -90,6 +148,16 @@ export const BotaoHistorico = styled(Button)`
    font-weight: bold;
    cursor: pointer;
    border: 1px solid #ADB5BD;
+`
+
+export const BotaoAtivar = styled(Button)`
+   padding: 1.2em;
+   border-radius: 5px;
+   background-color: white;
+   font-weight: bold;
+   cursor: pointer;
+   border: 1px solid #49D749;
+   color: #49D749;
 `
 
 export const BotaoInativar = styled(Button)`
@@ -406,11 +474,66 @@ export const LinkParaHome = styled(Link)`
    color: #6a7681;
 `
 
+export const CardLink = styled(Link)`
+   text-decoration: none;
+
+   div:first-child {
+      background-color: #F4F4F4;
+      height: 150px;
+      width: 250px;
+      flex-direction: column;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 3rem;
+   }
+
+   div > div {
+      width: 100%;
+      text-align: center;
+      height: 4.5rem;
+      background-color: white;
+      box-shadow:0px 0px 0px 3px #F4F4F4 inset;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
+
+   p {
+      margin: 0;
+      color: #343A40;
+      text-decoration: 'none';
+   }
+`
+
 export const MainContainer = styled.div` 
    background-color: #F4F4F4;
    font-family: 'Roboto', sans-serif;
    display: flex;
    flex-direction: column;
+`
+
+export const CardsDiv = styled.div` 
+   width: 820px;
+   flex-wrap: wrap;
+   display: flex;
+   align-items: center;
+   gap: 2rem;
+
+   @media screen and (max-width: 920px) {
+      flex-direction: column;
+   }
+`
+
+export const ContainerMain = styled.div`
+   background-color: white;
+   margin: 1.5rem;
+   min-height: 77vh;
+   max-height: fit-content;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 1rem 0;
 `
 
 export const ContainerGeral = styled.div`
@@ -425,11 +548,8 @@ export const ContainerGeral = styled.div`
 `
 
 export const VoltarPraHome = styled.div`
-   width: 100%;
-   margin: 1rem 0 0 1rem;
-   p{
-      margin: 0;
-   }
+   width: 98%;
+   padding: 1rem 0 0 1rem;
 `
 
 export const CadastroContainer = styled.div`
@@ -439,6 +559,20 @@ export const CadastroContainer = styled.div`
    flex-wrap: wrap;
    justify-content: space-between;
    gap: 1rem;
+
+   @media screen and (max-width: 920px) {
+      width: 623px;
+      justify-content: center;
+   }
+
+   @media screen and (max-width: 720px) {
+      width: 500px;
+      padding-bottom: 1rem;
+   }
+
+   @media screen and (max-width: 610px) {
+      width: 300px;
+   }
 
    form {
       width: 178px;
@@ -469,6 +603,10 @@ export const CadastroContainer = styled.div`
    div {
       display: flex;
       gap: 1.4rem;
+
+      @media screen and (max-width: 720px) {
+         flex-direction: column;
+      }
    }
 
    div > div {
@@ -485,6 +623,10 @@ export const CadastroContainer = styled.div`
       width: 100%;
       margin-top: 1rem;
       gap: 1.4rem;
+
+      @media screen and (max-width: 920px) {
+         align-self: center;
+      }
    }
 `
 

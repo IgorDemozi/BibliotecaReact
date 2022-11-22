@@ -1,15 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import styles from './Main.module.css'
+import { CardLink } from '../styles'
 
 const Card = ({ txt, children, rota }) => {
    return (
-      <Link to={rota} className={styles.cardLink}>
-         <div className={styles.card}>
+      <CardLink to={rota}>
+         <div>
             {children}
             <div><p>{txt}</p></div>
          </div>
-      </Link>
+      </CardLink>
    )
 }
 

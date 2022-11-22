@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BotaoEmprestar, DivFecharEmprestimo, EmprestarInputsContainer, InputCadastro, MenuEmprestar } from '../styles'
+import { BotaoEmprestar, DivFechar, EmprestarInputsContainer, InputCadastro, MenuEmprestar } from '../styles'
 import Fechar from '../imagens/Caminho_265.svg'
 import dados from '../data.json'
 
@@ -69,10 +69,10 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
 
    return (
       <MenuEmprestar>
-         <DivFecharEmprestimo>
+         <DivFechar>
             <h1>Informe os dados do aluno antes de continuar</h1>
             <img onClick={voltar} src={Fechar} alt='Fechar' />
-         </DivFecharEmprestimo>
+         </DivFechar>
 
          <EmprestarInputsContainer>
             <InputCadastro

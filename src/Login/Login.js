@@ -1,10 +1,7 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { ReactComponent as Logo } from '../imagens/Logo.svg'
-import Button from '../Componentes/Button'
-import Input from '../Componentes/Input'
-import styles from './Login.module.css'
 import dados from '../data.json'
+import { useNavigate } from 'react-router-dom'
+import { EsqueceuSenha, LoginBotao, LoginContainer, LoginEmail, LoginForm, LoginSenha, LogoImg } from '../styles'
 
 const Login = () => {
 
@@ -34,24 +31,22 @@ const Login = () => {
    }
 
    return (
-      <div className={styles.container}>
-         <form className={styles.form} onSubmit={handleSubmit}>
-            <Logo className={styles.logo} alt='Logotipo da biblioteca' />
+      <LoginContainer>
+         <LoginForm onSubmit={handleSubmit}>
+            <LogoImg alt='Logotipo da biblioteca' />
 
-            <Input
-               className={`${styles.loginCampos} ${styles.campoEmail}`}
+            <LoginEmail
                type='email' placeholder='Email' value={email} onChange={teste}
             />
 
-            <Input
-               className={`${styles.loginCampos} ${styles.campoSenha}`}
+            <LoginSenha
                type='password' placeholder='Senha' value={senha} onChange={teste}
             />
 
-            <Link className={styles.esqueceu} to='/home'>Esqueci minha senha</Link>
-            <Button className={styles.loginBotao}>Entrar</Button>
-         </form>
-      </div>
+            <EsqueceuSenha to='/home'>Esqueci minha senha</EsqueceuSenha>
+            <LoginBotao>Entrar</LoginBotao>
+         </LoginForm>
+      </LoginContainer>
    )
 }
 

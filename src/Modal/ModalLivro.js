@@ -26,6 +26,30 @@ const ModalLivro = ({ livro, index, setModalAtivado, setEmprestarAtivado, setMod
       setHistoricoAtivado(true);
    }
 
+   function devolverLivro() {
+      if (window.confirm('Confirmar devolução?')) {
+
+         dados.data.books[index].status.isRented = false;
+         var database = JSON.stringify(dados, null, '\t');
+
+         const salvar = async () => {
+            const criar = await window.showSaveFilePicker({
+               suggestedName: 'data.json',
+
+               types: [{
+                  description: 'JSON',
+                  accept: { 'application/json': ['.json'] }
+               }]
+            });
+            const escrever = await criar.createWritable();
+            await escrever.write(database);
+            await escrever.close();
+            setModalLivroAtivado(true);
+         }
+         salvar();
+      }
+   }
+
    function ativarLivro() {
       if (window.confirm('Confirmar ativação?')) {
 
@@ -49,7 +73,6 @@ const ModalLivro = ({ livro, index, setModalAtivado, setEmprestarAtivado, setMod
          }
          salvar();
       }
-
    }
 
    React.useEffect(() => {
@@ -58,7 +81,13 @@ const ModalLivro = ({ livro, index, setModalAtivado, setEmprestarAtivado, setMod
       } else {
          setLivroAtivado(true);
       }
-   }, [livro.status.isActive])
+
+      if (livro.status.isRented === false) {
+         setLivroEmprestado(false);
+      } else {
+         setLivroEmprestado(true);
+      }
+   }, [livro.status.isActive, livro.status.isRented])
 
    return (
       <MenuLivro>
@@ -69,7 +98,7 @@ const ModalLivro = ({ livro, index, setModalAtivado, setEmprestarAtivado, setMod
          <CapaBotaoSection>
             <img src={livro.image} alt='Capa do livro' />
             {livroEmprestado ?
-               <BotaoDevolver >Devolver</BotaoDevolver>
+               <BotaoDevolver onClick={devolverLivro}>Devolver</BotaoDevolver>
                :
                <React.Fragment>
                   {livroAtivado ?
@@ -119,7 +148,7 @@ const ModalLivro = ({ livro, index, setModalAtivado, setEmprestarAtivado, setMod
             </BotoesSection>
          </InfoBtSection>
 
-         {livroEmprestado && <EmprestadoInfo />}
+         {livroEmprestado && <EmprestadoInfo livro={livro} />}
          {!livroAtivado && <InativadoInfo livro={livro} />}
       </MenuLivro>
    )

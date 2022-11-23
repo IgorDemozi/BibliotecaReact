@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ReactComponent as Avatar } from '../imagens/person_black_24dp (1).svg'
 import { ReactComponent as Seta } from '../imagens/Arrow.svg'
 import { useNavigate } from 'react-router-dom'
-import styles from './Header.module.css'
+import { UserMenuDiv, UserMenuSair, UserMenuSection } from '../styles'
 
 const UserMenu = () => {
 
@@ -30,19 +30,19 @@ const UserMenu = () => {
    }
 
    return (
-      <section className={styles.userSection}>
+      <UserMenuSection>
          {ativado &&
-            <div className={styles.sair} onClick={logout}>
+            <UserMenuSair onClick={logout}>
                <p>Sair</p>
-            </div>
+            </UserMenuSair>
          }
 
-         <div className={styles.userMenu} onClick={exibir}>
+         <UserMenuDiv onClick={exibir}>
             <Avatar />
             <p>{usuario}</p>
             <Seta />
-         </div>
-      </section>
+         </UserMenuDiv>
+      </UserMenuSection>
    )
 }
 

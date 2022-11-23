@@ -1,19 +1,49 @@
 import styled from 'styled-components';
 import SetaBaixo from './imagens/Poligono_4.svg';
 import Filtro from './imagens/Caminho_147.svg';
-import Icone from './imagens/auto_stories_FILL0_wght400_GRAD0_opsz48_1.svg';
+import IconeEmprestar from './imagens/auto_stories_FILL0_wght400_GRAD0_opsz48_1.svg';
+import Background from './imagens/emil-widlund-xrbbXIXAWY0-unsplash.png';
+import IconeEmail from './imagens/Grupo_37.svg';
+import IconeSenha from './imagens/Grupo_36.svg';
 import Input from './Componentes/Input';
 import Select from './Componentes/Select';
 import Button from './Componentes/Button';
 import { Link } from 'react-router-dom';
 import { ReactComponent as Seta } from './imagens/chevron_left_FILL0_wght400_GRAD0_opsz48.svg';
 import { ReactComponent as Lupa } from './imagens/Caminho_263.svg';
+import { ReactComponent as Logo } from './imagens/Logo.svg'
 
 export const MenuHistorico = styled.section`
    background-color: white;
    width: fit-content;
    height: fit-content;
    padding: 2em;
+`
+
+export const EmprestadoInfoSection = styled.section`
+   width: 100%; 
+
+   #container{
+      background-color: #F4F4F4;
+      height: fit-content;
+      width: 670px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+   }
+
+   h1 {
+      text-align: left;
+      margin-bottom: 0.5rem;
+   }
+
+   p {
+      margin-top: 0.3rem;
+      font-size: 16px;
+      font-family: Roboto;
+      color: #3E4756;
+   }
 `
 
 export const InativadoInfoSection = styled.section`
@@ -186,7 +216,7 @@ export const BotaoDevolver = styled(Button)`
    width: 244px;
    border: 1px solid #ADB5BD;
    border-radius: 5px;
-   background-image: url(${Icone});
+   background-image: url(${IconeEmprestar});
    background-repeat: no-repeat;
    background-position: 34% 44%;
    background-size: 1.3em;
@@ -201,7 +231,7 @@ export const BotaoEmprestar = styled(Button)`
    width: 244px;
    border: 1px solid #ADB5BD;
    border-radius: 5px;
-   background-image: url(${Icone});
+   background-image: url(${IconeEmprestar});
    background-repeat: no-repeat;
    background-position: 34% 44%;
    background-size: 1.3em;
@@ -263,6 +293,11 @@ export const MenuLivro = styled.section`
    flex-wrap: wrap;
    justify-content: space-between;
    gap: 0.8rem;
+
+   @media screen and (max-width: 730px) {
+      transform: scale(0.6);
+      justify-content: center;
+   }
 `
 
 export const ModalPrincipal = styled.div`
@@ -360,6 +395,10 @@ export const PesquisaForm = styled.form`
    border-radius: 5px;
    padding: 6px;
    width: 666px;
+
+   @media screen and (max-width: 780px) {
+      width: 80%
+   }
 `
 
 export const LupaImg = styled(Lupa)`
@@ -533,7 +572,10 @@ export const ContainerMain = styled.div`
    display: flex;
    align-items: center;
    justify-content: center;
-   padding: 1rem 0;
+
+   @media screen and (max-width: 920px) {
+        padding: 1rem 0;
+   }
 `
 
 export const ContainerGeral = styled.div`
@@ -563,11 +605,12 @@ export const CadastroContainer = styled.div`
    @media screen and (max-width: 920px) {
       width: 623px;
       justify-content: center;
+      margin-top: 6vh;
+      padding-bottom: 1rem;
    }
 
    @media screen and (max-width: 720px) {
       width: 500px;
-      padding-bottom: 1rem;
    }
 
    @media screen and (max-width: 610px) {
@@ -637,4 +680,106 @@ export const Sinopse = styled.textarea`
    border: 1px solid #133052;
    font: normal normal normal 16px/21px Roboto;
    resize: none;
+`
+
+export const UserMenuDiv = styled.div`
+   display: flex;
+   align-items: center;
+   gap: 4px;
+   cursor: pointer;
+   height: 30px;
+`
+
+export const UserMenuSair = styled.div`
+   background-color: #F4F4F4;
+   border-radius: 4px;
+   width: 120px;
+   height: 50px;
+   font: normal normal normal 18px/18px Roboto;
+   color: #2A2A2A;
+   cursor: pointer;
+
+   p {
+      margin: 1rem 0 1rem 1rem;
+   }
+`
+
+export const UserMenuSection = styled.section`
+   display: flex;
+   align-items: center;
+`
+
+export const Cabecalho = styled.header`
+   background-color: white;
+   height: 96px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 0 2rem;
+`
+
+export const LoginBotao = styled(Button)`
+   padding: 1rem 2rem;
+   border-radius: 5px;
+   border: 0;
+   background-color: #FFC501;
+   text-transform: uppercase;
+   font: normal normal bold 16px/21px Roboto;
+   cursor: pointer;
+`
+
+export const LogoImg = styled(Logo)`
+   margin: 0 auto 2rem auto;
+   transform: scale(1.3);
+`
+
+export const EsqueceuSenha = styled(Link)`
+   color: black;
+   font: normal normal bold 14px/19px Roboto;
+`
+
+export const LoginSenha = styled(Input)`
+   background-color: #F1F3F5;
+   padding: 1.5em;
+   border-radius: 5px;
+   border: 0;
+   font: 14px Roboto;
+   background-image: url(${IconeSenha});
+   background-repeat: no-repeat;
+   background-position: 94%;
+`
+
+export const LoginEmail = styled(Input)`
+   background-color: #F1F3F5;
+   padding: 1.5em;
+   border-radius: 5px;
+   border: 0;
+   font: 14px Roboto;
+   background-image: url(${IconeEmail});
+   background-repeat: no-repeat;
+   background-position: 94%;
+`
+
+export const LoginForm = styled.form`
+   margin: 0;
+   background-color: white;
+   width: 370px;
+   height: 385px;
+   border-radius: 5px;
+   margin: 12vh 0;
+   padding: 2.5em;
+   box-shadow: 0 0 0 1000px rgba(60, 60, 60, 0.6);
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+`
+
+export const LoginContainer = styled.section`
+   margin: 0;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   background-image: url(${Background});
+   background-position-y: 65%;
+   height: 100vh;
 `

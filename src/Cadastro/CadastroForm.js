@@ -75,7 +75,7 @@ const CadastroForm = () => {
          title: titulo,
          author: autor,
          genre: genero,
-         status: { isActive: true, description: '' },
+         status: { isRented: false, isActive: true, description: '' },
          image: base64,
          systemEntryDate: dataFormatada,
          synopsis: sinopse,

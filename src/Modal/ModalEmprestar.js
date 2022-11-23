@@ -30,8 +30,8 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
    }
 
    function voltar() {
-      setModalLivroAtivado(true);
       setEmprestarAtivado(false);
+      setModalLivroAtivado(true);
    }
 
    function salvar() {
@@ -48,6 +48,8 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
          deliveryDate: devolucao
       });
 
+      dados.data.books[index].status.isRented = true;
+
       var database = JSON.stringify(dados, null, '\t');
 
       const salvar = async () => {
@@ -62,9 +64,9 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
          const escrever = await criar.createWritable();
          await escrever.write(database);
          await escrever.close();
+         voltar();
       }
       salvar();
-      voltar();
    }
 
    return (

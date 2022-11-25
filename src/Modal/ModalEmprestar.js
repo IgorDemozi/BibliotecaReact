@@ -34,13 +34,9 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
       setModalLivroAtivado(true);
    }
 
-   function salvar() {
-
-      if (aluno === '' || turma === '' || retirada === '' || devolucao === '') {
-         alert('Preencha todos os campos');
-         return;
-      }
-
+   function salvar(event) {
+      event.preventDefault();
+      
       dados.data.books[index].rentHistory.push({
          studentName: aluno,
          class: turma,
@@ -70,7 +66,7 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
    }
 
    return (
-      <MenuEmprestar>
+      <MenuEmprestar onSubmit={salvar}>
          <DivFechar>
             <h1>Informe os dados do aluno antes de continuar</h1>
             <img onClick={voltar} src={Fechar} alt='Fechar' />
@@ -81,6 +77,7 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
                value={aluno}
                onChange={setValores}
                type='text' placeholder='Nome do aluno'
+               required
             />
 
             <InputCadastro
@@ -88,6 +85,7 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
                onChange={setValores}
                type='text'
                placeholder='Turma'
+               required
             />
 
             <InputCadastro
@@ -97,6 +95,7 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
                placeholder='Data de retirada'
                onFocus={() => setType1('date')}
                onBlur={() => setType1('text')}
+               required
             />
 
             <InputCadastro
@@ -106,10 +105,11 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
                placeholder='Data de devolução'
                onFocus={() => setType2('date')}
                onBlur={() => setType2('text')}
+               required
             />
          </EmprestarInputsContainer>
 
-         <BotaoEmprestar onClick={salvar}>Emprestar</BotaoEmprestar>
+         <BotaoEmprestar>Emprestar</BotaoEmprestar>
       </MenuEmprestar>
    )
 }

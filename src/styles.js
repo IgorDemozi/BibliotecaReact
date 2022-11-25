@@ -73,7 +73,7 @@ export const InativadoInfoSection = styled.section`
    }
 `
 
-export const MenuInativar = styled.section`
+export const MenuInativar = styled.form`
    background-color: white;
    width: 580px;
    height: 200px;
@@ -97,7 +97,7 @@ export const MenuInativar = styled.section`
    }
 `
 
-export const MenuEmprestar = styled.section`
+export const MenuEmprestar = styled.form`
    background-color: white;
    width: 650px;
    display: flex;
@@ -408,7 +408,7 @@ export const LupaImg = styled(Lupa)`
 export const TabelaInput = styled(Input)`
    border: none;
    border-bottom: 2px solid black;
-   width: 110px;
+   width: 75%;
    background-image: url(${Filtro});
    background-repeat: no-repeat;
    background-position: 2% 1%;
@@ -426,10 +426,10 @@ export const Tabela = styled.table`
    margin: 1.5rem;
 
    th {
-   background: #FFC501;
-   height: 2em;
-   text-align: left;
-   padding-left: 2em;
+      background: #FFC501;
+      height: 2em;
+      text-align: left;
+      padding-left: 2rem;
    }
 
    tr th:nth-child(1) {
@@ -444,7 +444,7 @@ export const Tabela = styled.table`
       border-bottom: 1px solid #CDCDCD;
       padding: 10px;
       text-align: left;
-      padding-left: 2em;
+      padding-left: 2rem;
    }
 
    tbody tr:last-child td {
@@ -590,11 +590,11 @@ export const ContainerGeral = styled.div`
 `
 
 export const VoltarPraHome = styled.div`
-   width: 98%;
+   align-self: flex-start;
    padding: 1rem 0 0 1rem;
 `
 
-export const CadastroContainer = styled.div`
+export const CadastroContainer = styled.form`
    width: 840px;
    margin-top: 12vh;
    display: flex;
@@ -617,29 +617,29 @@ export const CadastroContainer = styled.div`
       width: 300px;
    }
 
-   form {
-      width: 178px;
-      height: 206px;
-      
-      label{
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         border: 3px dashed #FFC501;
-         color: #FFC501;
-         height: 200px;
-         width: 172px;
-         gap: 0.5rem;
-         cursor: pointer;
-      }
+   label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px dashed #FFC501;
+      color: #FFC501;
+      height: 200px;
+      width: 172px;
+      gap: 0.5rem;
+      cursor: pointer;
 
-      p{
+      p {
          margin: 0;
          width: fit-content;
       }
 
       input {
-         display: none;
+         width: 1px;
+         height: 1px;
+         padding: 0;
+         border: 0;
+         opacity: 0;
+         position: absolute;
       }
    }
 

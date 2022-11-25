@@ -23,6 +23,7 @@ const ModalHistorico = ({ livro, setHistoricoAtivado, setModalLivroAtivado }) =>
          case 'entrega':
             setEntrega(event.target.value)
             break;
+         default: break;
       }
    }
 
@@ -81,7 +82,6 @@ const ModalHistorico = ({ livro, setHistoricoAtivado, setModalLivroAtivado }) =>
                      </React.Fragment>
                   )
                })}
-
             </tbody>
 
          </Tabela>

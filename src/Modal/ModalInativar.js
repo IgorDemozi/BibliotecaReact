@@ -17,12 +17,6 @@ const ModalInativar = ({ index, setInativarAtivado, setModalLivroAtivado }) => {
    }
 
    function salvar() {
-
-      if (motivo === '') {
-         alert('Preencha o campo');
-         return;
-      }
-
       dados.data.books[index].status.isActive = false;
       dados.data.books[index].status.description = motivo;
 
@@ -47,14 +41,14 @@ const ModalInativar = ({ index, setInativarAtivado, setModalLivroAtivado }) => {
    }
 
    return (
-      <MenuInativar>
+      <MenuInativar onSubmit={salvar}>
          <DivFechar>
             <h1>Inativar livro</h1>
             <img onClick={voltar} src={Fechar} alt='Fechar' />
          </DivFechar>
 
-         <textarea value={motivo} onChange={setValor} />
-         <BotaoInativar onClick={salvar}>Inativar</BotaoInativar>
+         <textarea required value={motivo} onChange={setValor} />
+         <BotaoInativar>Inativar</BotaoInativar>
       </MenuInativar>
    )
 }

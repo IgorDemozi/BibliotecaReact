@@ -21,13 +21,19 @@ const Login = () => {
 
    function handleSubmit(event) {
       event.preventDefault();
+      var i = 0;
 
       login.forEach(item => {
          if (email === item.email && senha === item.password) {
+            i = 1;
             localStorage.setItem('atual-usuario', item.email);
             navigate('/home');
          }
       });
+
+      if (i === 0) {
+         alert('Usuário inválido ou senha inválida');
+      }
    }
 
    return (
@@ -36,11 +42,11 @@ const Login = () => {
             <LogoImg alt='Logotipo da biblioteca' />
 
             <LoginEmail
-               type='email' placeholder='Email' value={email} onChange={teste}
+               type='email' placeholder='Email' value={email} onChange={teste} required
             />
 
             <LoginSenha
-               type='password' placeholder='Senha' value={senha} onChange={teste}
+               type='password' placeholder='Senha' value={senha} onChange={teste} required
             />
 
             <EsqueceuSenha to='/home'>Esqueci minha senha</EsqueceuSenha>

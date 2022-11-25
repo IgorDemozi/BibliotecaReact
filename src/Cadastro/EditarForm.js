@@ -1,6 +1,6 @@
 import dados from '../data.json'
+import IconeAdicionar from '../imagens/Caminho 261.svg';
 import React, { useState } from 'react'
-import { ReactComponent as Adicionar } from '../imagens/Caminho 261.svg'
 import { CadastroContainer, ContainerGeral, Sinopse, VoltarPraHome, LinkParaHome, InputCadastro, SelectCadastro, BotaoCancelar, BotaoSalvar, SetaEsquerda, Imagem } from '../styles'
 import { useNavigate } from 'react-router-dom'
 
@@ -18,11 +18,10 @@ const EditarForm = ({ livro, index }) => {
    var generos = [];
 
    React.useEffect(() => {
-      setData(data.split("/").reverse().join("-")) ;
-   }, []);
+      setData(data.split("/").reverse().join("-"));
+   }, [data]);
 
    function setValores(event) {
-
       switch (event.target.placeholder) {
          case 'Título':
             setTitulo(event.target.value)
@@ -33,10 +32,11 @@ const EditarForm = ({ livro, index }) => {
          case 'Sinopse':
             setSinopse(event.target.value)
             break;
-      }
 
-      if (event.target.type === 'date') {
-         setData(event.target.value);
+         default:
+            if (event.target.type === 'date') {
+               setData(event.target.value);
+            }
       }
    }
 
@@ -69,12 +69,8 @@ const EditarForm = ({ livro, index }) => {
       }
    }
 
-   function salvar() {
-
-      if (titulo === '' || sinopse === '' || autor === '' || genero === '' || data === '') {
-         alert('Preencha todos os campos');
-         return;
-      }
+   function salvar(event) {
+      event.preventDefault();
 
       var dataFormatada = data.split("-").reverse().join("/");
 
@@ -84,7 +80,7 @@ const EditarForm = ({ livro, index }) => {
       dados.data.books[index].image = base64;
       dados.data.books[index].systemEntryDate = dataFormatada;
       dados.data.books[index].synopsis = sinopse;
-               
+
       var database = JSON.stringify(dados, null, '\t');
 
       const salvar = async () => {
@@ -133,38 +129,38 @@ const EditarForm = ({ livro, index }) => {
             </p>
          </VoltarPraHome>
 
-         <CadastroContainer>
-            <form>
-               <label>
-                  {imgNoInput ?
-                     <>
-                        <Imagem src={base64} alt='' />
-                     </>
-                     :
-                     <>
-                        <Adicionar />
-                        <p>Capa</p>
-                     </>
-                  }
-                  <InputCadastro type='file' onChange={pegarBase64} />
-               </label>
-            </form>
+         <CadastroContainer onSubmit={salvar}>
+            <label>
+               {imgNoInput ?
+                  <React.Fragment>
+                     <Imagem src={base64} alt='' />
+                     <InputCadastro type='file' onChange={pegarBase64} />
+                  </React.Fragment>
+                  :
+                  <React.Fragment>
+                     <InputCadastro required type='file' onChange={pegarBase64} />
+                     <img src={IconeAdicionar} alt='' />
+                     <p>Capa</p>
+                  </React.Fragment>
+               }
+            </label>
 
             <div>
                <div>
-                  <InputCadastro type='text' placeholder='Título' value={titulo} onChange={setValores} />
-                  <Sinopse placeholder='Sinopse' value={sinopse} onChange={setValores} />
+                  <InputCadastro required type='text' placeholder='Título' value={titulo} onChange={setValores} />
+                  <Sinopse required placeholder='Sinopse' value={sinopse} onChange={setValores} />
                </div>
 
                <div>
-                  <InputCadastro type='text' placeholder='Autor' value={autor} onChange={setValores} />
-                  <SelectCadastro opcaoNeutra='Selecione um gênero' className='select' value={genero} options={generos} onChange={setValGenero} />
-                  <InputCadastro type='date' value={data} onChange={setValores} />
+                  <InputCadastro required type='text' placeholder='Autor' value={autor} onChange={setValores} />
+                  <SelectCadastro required opcaoNeutra='Selecione um gênero' className='select' value={genero} 
+                  options={generos} onChange={setValGenero} />
+                  <InputCadastro required type='date' value={data} onChange={setValores} />
                </div>
             </div>
 
             <div>
-               <BotaoSalvar onClick={salvar}>salvar</BotaoSalvar>
+               <BotaoSalvar>salvar</BotaoSalvar>
                <BotaoCancelar onClick={zerarValores}>cancelar</BotaoCancelar>
             </div>
          </CadastroContainer>

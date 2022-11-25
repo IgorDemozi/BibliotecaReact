@@ -28,6 +28,7 @@ const EmprestimosForm = () => {
          case 'entrega':
             setEntrega(event.target.value)
             break;
+         default: break;
       }
    }
 
@@ -71,12 +72,10 @@ const EmprestimosForm = () => {
 
                {books.map((item) => {
                   if (item.rentHistory.length > 0) {
-                     var i = 0
                      return (
-                        item.rentHistory.map((element) => {
-                           i++;
+                        item.rentHistory.map((element, index) => {
                            return (
-                              <React.Fragment key={i}>
+                              <React.Fragment key={index}>
                                  {element.studentName.toLowerCase().includes(aluno.toLowerCase()) &&
                                     element.class.toLowerCase().includes(turma.toLowerCase()) &&
                                     item.title.toLowerCase().includes(livro.toLowerCase()) &&
@@ -95,8 +94,8 @@ const EmprestimosForm = () => {
                         })
                      )
                   }
+                  return null;
                })}
-
             </tbody>
 
          </Tabela>

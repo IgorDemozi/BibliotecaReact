@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { ReactComponent as Avatar } from '../imagens/person_black_24dp (1).svg'
 import { ReactComponent as Seta } from '../imagens/Arrow.svg'
-import { useNavigate } from 'react-router-dom'
 import { UserMenuDiv, UserMenuSair, UserMenuSection } from '../styles'
+import { useNavigate } from 'react-router-dom'
+import { CSSTransition } from 'react-transition-group'
+import '../App.css';
 
 const UserMenu = () => {
-
    const [usuario, setUsuario] = useState('');
    const [ativado, setAtivado] = useState(false);
+   const [style, setStyle] = useState({});
    const navigate = useNavigate();
 
    React.useEffect(() => {
@@ -25,22 +27,30 @@ const UserMenu = () => {
    }
 
    function exibir() {
-      if (ativado) setAtivado(false);
-      else setAtivado(true);
+      if (ativado) {
+         setAtivado(false);
+         setStyle({ transitionDuration: '0.2s', transitionTimingFunction: 'ease-in-out' });
+      } else {
+         setAtivado(true);
+         setStyle({
+            transform: 'rotate(450deg)', transitionDuration: '0.2s',
+            transitionTimingFunction: 'ease-in-out'
+         });
+      }
    }
 
    return (
       <UserMenuSection>
-         {ativado &&
+         <CSSTransition in={ativado} key={0} timeout={300} classNames="transition" unmountOnExit>
             <UserMenuSair onClick={logout}>
                <p>Sair</p>
             </UserMenuSair>
-         }
+         </CSSTransition>
 
-         <UserMenuDiv onClick={exibir}>
+         <UserMenuDiv onClick={exibir} >
             <Avatar />
             <p>{usuario}</p>
-            <Seta />
+            <Seta style={style} />
          </UserMenuDiv>
       </UserMenuSection>
    )

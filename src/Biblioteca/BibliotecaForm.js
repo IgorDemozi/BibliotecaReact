@@ -5,7 +5,7 @@ import Modal from '../Modal/Modal';
 
 const BibliotecaForm = () => {
    const { books } = dados.data;
-   const options = ['Gênero', 'Autor', 'Data de entrada'];
+   const options = ['Título', 'Gênero', 'Autor', 'Data de entrada'];
    const [filtro, setFiltro] = useState('');
    const [pesquisa, setPesquisa] = useState('^^');
    const [texto, setTexto] = useState('');
@@ -32,6 +32,25 @@ const BibliotecaForm = () => {
       setPesquisa(texto);
    }
 
+   function ordenar(filtro) {
+      if (filtro === 'Título') {
+         books.sort((a, b) => a.title.localeCompare(b.title));
+      } else if (filtro === 'Gênero') {
+         books.sort((a, b) => a.genre.localeCompare(b.genre));
+      } else if (filtro === 'Autor') {
+         books.sort((a, b) => a.author.localeCompare(b.author));
+      } else if (filtro === 'Data de entrada') {
+         books.sort(function (a, b) {
+            var data1 = a.systemEntryDate.split("/").reverse().join("-");
+            var data2 = b.systemEntryDate.split("/").reverse().join("-");
+            return new Date(data1) - new Date(data2);
+         });
+      }
+      else {
+         return;
+      }
+   }
+
    return (
       <ContainerGeral>
          <VoltarPraHome>
@@ -49,20 +68,22 @@ const BibliotecaForm = () => {
                <PesquisaButton onClick={pesquisar}>Buscar</PesquisaButton>
             </PesquisaForm>
 
-            <PesquisaSelect opcaoNeutra='Selecione' className='select' value={filtro} options={options} onChange={selecionarFiltro} />
+            <PesquisaSelect opcaoNeutra='Selecione' className='select'
+               value={filtro} options={options} onChange={selecionarFiltro} />
          </PesquisaContainer>
 
          <BibliotecaItensContainer>
-            {modalAtivado && <Modal setModalAtivado={setModalAtivado} livro={livro} index={index}/>}
+            {modalAtivado && <Modal setModalAtivado={setModalAtivado} livro={livro} index={index} />}
+            {ordenar(filtro)}
             {books.map((livro, index) => {
                if (livro.title.toLowerCase().includes(pesquisa.toLowerCase())) {
                   return (
-                     <BibliotecaItem onClick={() => {abrirModal(livro, index)}} key={index}>
+                     <BibliotecaItem onClick={() => { abrirModal(livro, index) }} key={index}>
                         <img src={livro.image} alt='' />
                         <p>{livro.title}</p>
                      </BibliotecaItem>
                   )
-               }
+               } else return null;
             })}
          </BibliotecaItensContainer>
       </ContainerGeral>

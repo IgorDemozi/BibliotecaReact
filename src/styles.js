@@ -312,7 +312,7 @@ export const ModalPrincipal = styled.div`
    align-items: center;
    justify-content: center;
    gap: 0.8em;
-   z-index: 100;
+   z-index: 1000;
 `
 
 export const BibliotecaItensContainer = styled.div`
@@ -683,11 +683,13 @@ export const Sinopse = styled.textarea`
 `
 
 export const UserMenuDiv = styled.div`
+   background-color: white;
    display: flex;
    align-items: center;
+   height: 50px;
    gap: 4px;
    cursor: pointer;
-   height: 30px;
+   z-index: 100;
 `
 
 export const UserMenuSair = styled.div`
@@ -698,6 +700,8 @@ export const UserMenuSair = styled.div`
    font: normal normal normal 18px/18px Roboto;
    color: #2A2A2A;
    cursor: pointer;
+   z-index: 1;
+   margin-right: 6px;
 
    p {
       margin: 1rem 0 1rem 1rem;

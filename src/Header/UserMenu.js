@@ -29,11 +29,11 @@ const UserMenu = () => {
    function exibir() {
       if (ativado) {
          setAtivado(false);
-         setStyle({ transitionDuration: '0.2s', transitionTimingFunction: 'ease-in-out' });
+         setStyle({ transitionDuration: '0.3s', transitionTimingFunction: 'ease-in-out' });
       } else {
          setAtivado(true);
          setStyle({
-            transform: 'rotate(450deg)', transitionDuration: '0.2s',
+            transform: 'rotate(450deg)', transitionDuration: '0.3s',
             transitionTimingFunction: 'ease-in-out'
          });
       }

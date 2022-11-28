@@ -550,6 +550,7 @@ export const MainContainer = styled.div`
    font-family: 'Roboto', sans-serif;
    display: flex;
    flex-direction: column;
+   min-height: 100%;
 `
 
 export const CardsDiv = styled.div` 
@@ -572,6 +573,7 @@ export const ContainerMain = styled.div`
    display: flex;
    align-items: center;
    justify-content: center;
+   flex-grow: 1;
 
    @media screen and (max-width: 920px) {
         padding: 1rem 0;
@@ -587,6 +589,7 @@ export const ContainerGeral = styled.div`
    flex-wrap: wrap;
    align-items: center;
    flex-direction: column;
+   flex-grow: 1;
 `
 
 export const VoltarPraHome = styled.div`

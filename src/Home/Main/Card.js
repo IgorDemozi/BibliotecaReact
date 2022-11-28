@@ -1,5 +1,5 @@
 import React from 'react'
-import { CardLink } from '../styles'
+import { CardLink } from '../../styles'
 
 const Card = ({ txt, children, rota }) => {
    return (

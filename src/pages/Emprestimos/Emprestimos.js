@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from '../Header/Header'
-import { MainContainer } from '../styles'
-import EmprestimosForm from './EmprestimosForm'
+import Header from '../../Header/Header.js'
+import { MainContainer } from '../pages.styles.js'
+import EmprestimosForm from './EmprestimosForm.js'
 
 const Emprestimos = () => {
    return (

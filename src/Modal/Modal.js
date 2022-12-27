@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ModalPrincipal } from '../styles'
+import { ModalPrincipal } from './Modal.styles.js'
 import ModalEmprestar from './ModalEmprestar';
 import ModalHistorico from './ModalHistorico';
 import ModalInativar from './ModalInativar';

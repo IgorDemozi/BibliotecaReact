@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from '../Header/Header'
+import Header from '../../Header/Header'
 import CadastroForm from './CadastroForm'
-import { MainContainer } from '../styles'
+import { MainContainer } from '../pages.styles.js'
 
 const Cadastro = () => {
    return (

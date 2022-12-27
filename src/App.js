@@ -1,11 +1,11 @@
 import './App.css';
-import Login from './Login/Login'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Home from './Home/Home';
-import Cadastro from './Cadastro/Cadastro';
-import Biblioteca from './Biblioteca/Biblioteca';
-import Emprestimos from './Emprestimos/Emprestimos';
-import Editar from './Cadastro/Editar';
+import Login from './pages/Login/Login'
+import Home from './pages/Home/Home';
+import Cadastro from './pages/Cadastro/Cadastro';
+import Biblioteca from './pages/Biblioteca/Biblioteca';
+import Emprestimos from './pages/Emprestimos/Emprestimos';
+import Editar from './pages/Cadastro/Editar';
 
 function App() {
    return (

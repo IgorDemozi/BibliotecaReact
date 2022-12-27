@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { DivFechar, MenuHistorico, Tabela, TabelaInput } from '../styles'
-import Fechar from '../imagens/Caminho_265.svg'
+import {  Tabela, TabelaInput } from '../styles'
+import {  DivFechar, MenuHistorico } from './Modal.styles.js'
+import Fechar from '../assets/Caminho_265.svg'
 
 const ModalHistorico = ({ livro, setHistoricoAtivado, setModalLivroAtivado }) => {
 

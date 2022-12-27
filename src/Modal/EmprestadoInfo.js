@@ -1,8 +1,7 @@
 import React from 'react'
-import { EmprestadoInfoSection } from '../styles';
+import { EmprestadoInfoSection } from './Modal.styles.js';
 
 const EmprestadoInfo = ({ livro }) => {
-
    const emprestimo = livro.rentHistory[Object.keys(livro.rentHistory).length - 1];
 
    return (

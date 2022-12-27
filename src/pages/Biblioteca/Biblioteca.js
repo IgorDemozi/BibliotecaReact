@@ -1,6 +1,6 @@
 import React from 'react'
-import Header from '../Header/Header'
-import { MainContainer } from '../styles'
+import Header from '../../Header/Header'
+import { MainContainer } from '../pages.styles.js'
 import BibliotecaForm from './BibliotecaForm'
 
 const Biblioteca = () => {

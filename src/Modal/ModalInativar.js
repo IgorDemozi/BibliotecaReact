@@ -1,19 +1,16 @@
 import React, { useState } from 'react'
-import { BotaoInativar, DivFechar, MenuInativar } from '../styles'
-import Fechar from '../imagens/Caminho_265.svg'
+import { DivFechar, MenuInativar } from './Modal.styles'
+import Fechar from '../assets/Caminho_265.svg'
 import dados from '../data.json'
+import { BotaoOpcoesModal } from './ModalLivro.styles'
+import { TextfieldCadastro } from '../pages/Cadastro/CadastroForm.styles'
 
 const ModalInativar = ({ index, setInativarAtivado, setModalLivroAtivado }) => {
-
    const [motivo, setMotivo] = useState('');
 
    function voltar() {
       setInativarAtivado(false);
       setModalLivroAtivado(true);
-   }
-
-   function setValor(event) {
-      setMotivo(event.target.value);
    }
 
    function salvar() {
@@ -22,7 +19,7 @@ const ModalInativar = ({ index, setInativarAtivado, setModalLivroAtivado }) => {
 
       var database = JSON.stringify(dados, null, '\t');
 
-      const salvar = async () => {
+      const salvarDados = async () => {
          const criar = await window.showSaveFilePicker({
             suggestedName: 'data.json',
 
@@ -35,9 +32,9 @@ const ModalInativar = ({ index, setInativarAtivado, setModalLivroAtivado }) => {
          await escrever.write(database);
          await escrever.close();
 
-         voltar();
       }
-      salvar();
+      salvarDados();
+      voltar();
    }
 
    return (
@@ -47,8 +44,31 @@ const ModalInativar = ({ index, setInativarAtivado, setModalLivroAtivado }) => {
             <img onClick={voltar} src={Fechar} alt='Fechar' />
          </DivFechar>
 
-         <textarea required value={motivo} onChange={setValor} />
-         <BotaoInativar>Inativar</BotaoInativar>
+         <TextfieldCadastro
+            type='text'
+            label='Motivo'
+            value={motivo}
+            onChange={(motivo) => setMotivo(motivo.target.value)}
+            multiline
+            rows={2}
+            inputProps={{
+               style: {
+                  height: "100%",
+                  border: 'none'
+               }
+            }}
+            required
+         />
+
+         <BotaoOpcoesModal
+            type='submit'
+            sx={{
+               border: '1px solid #ED5E5E',
+               color: '#ED5E5E',
+               '&:hover': {
+                  backgroundColor: '#ffeeee'
+               }
+            }}>Inativar</BotaoOpcoesModal>
       </MenuInativar>
    )
 }

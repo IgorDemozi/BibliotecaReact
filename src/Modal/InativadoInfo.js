@@ -1,5 +1,5 @@
 import React from 'react'
-import { InativadoInfoSection } from '../styles'
+import { InativadoInfoSection } from './Modal.styles.js'
 
 const InativadoInfo = ({livro}) => {
    return (

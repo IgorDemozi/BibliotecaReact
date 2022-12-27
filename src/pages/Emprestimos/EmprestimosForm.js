@@ -1,6 +1,7 @@
-import dados from '../data.json'
+import dados from '../../data.json'
 import React, { useState } from 'react'
-import { ContainerGeral, LinkParaHome, SetaEsquerda, Tabela, VoltarPraHome, TabelaInput } from '../styles'
+import { Tabela, TabelaInput } from '../../styles.js'
+import { LinkParaHome, VoltarPraHome, ContainerGeral, SetaEsquerda } from '../pages.styles'
 
 const EmprestimosForm = () => {
 

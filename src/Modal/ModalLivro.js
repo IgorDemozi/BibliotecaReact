@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import { BotaoAtivar, BotaoDevolver, BotaoEditar, BotaoEmprestar, BotaoHistorico, BotaoInativar, BotoesSection, CapaBotaoSection, DivFecharSimples, InfoBtSection, Informacoes, MenuLivro, SinopseFormatada } from '../styles'
-import Fechar from '../imagens/Caminho_265.svg'
 import dados from '../data.json'
+import Fechar from '../assets/Caminho_265.svg'
 import InativadoInfo from './InativadoInfo'
 import EmprestadoInfo from './EmprestadoInfo'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { BotaoDevolver, BotoesSection, CapaBotaoSection, DivFecharSimples, InfoBtSection, Informacoes, MenuLivro, SinopseFormatada, BotaoEmprestar, BotaoOpcoesModal } from './ModalLivro.styles.js'
 
 const ModalLivro = ({ livro, index, setModalAtivado, setEmprestarAtivado, setModalLivroAtivado, setInativarAtivado, setHistoricoAtivado }) => {
 
@@ -136,15 +136,46 @@ const ModalLivro = ({ livro, index, setModalAtivado, setEmprestarAtivado, setMod
             </Informacoes>
 
             <BotoesSection>
-               <Link to='/editar' state={{ livro: livro, index: index }}><BotaoEditar>Editar</BotaoEditar></Link>
+               <Link to='/editar' state={{ livro: livro, index: index }} style={{ textDecoration: 'none' }}>
+                  <BotaoOpcoesModal
+                     sx={{
+                        border: '1px solid #167CE2',
+                        color: '#167CE2'
+                     }}
+                  >Editar</BotaoOpcoesModal>
+               </Link>
 
                {livroAtivado ?
-                  <BotaoInativar onClick={abrirInativar}>Inativar</BotaoInativar>
+                  <BotaoOpcoesModal
+                     onClick={abrirInativar}
+                     sx={{
+                        border: '1px solid #ED5E5E',
+                        color: '#ED5E5E',
+                        '&:hover': {
+                           backgroundColor: '#ffeeee'
+                        }
+                     }}
+                  >Inativar</BotaoOpcoesModal>
                   :
-                  <BotaoAtivar onClick={ativarLivro}>Ativar</BotaoAtivar>
+                  <BotaoOpcoesModal
+                     onClick={ativarLivro}
+                     sx={{
+                        border: '1px solid #49D749',
+                        color: '#49D749'
+                     }}
+                  >Ativar</BotaoOpcoesModal>
                }
 
-               <BotaoHistorico onClick={abrirHistorico}>Histórico</BotaoHistorico>
+               <BotaoOpcoesModal
+                  onClick={abrirHistorico}
+                  sx={{
+                     border: '1px solid #ADB5BD',
+                     color: 'black',
+                     '&:hover': {
+                        backgroundColor: '#eeeeee'
+                     }
+                  }}
+               >Histórico</BotaoOpcoesModal>
             </BotoesSection>
          </InfoBtSection>
 

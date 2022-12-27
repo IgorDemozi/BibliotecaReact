@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from '../Header/Header';
+import Header from '../../Header/Header';
 import EditarForm from './EditarForm';
-import { MainContainer } from '../styles';
+import { MainContainer } from '../pages.styles.js';
 import { useLocation } from 'react-router-dom';
 
 const Editar = () => {

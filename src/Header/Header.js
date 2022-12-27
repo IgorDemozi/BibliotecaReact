@@ -1,6 +1,6 @@
 import React from 'react'
 import UserMenu from '../Header/UserMenu'
-import { ReactComponent as Logo } from '../imagens/Logo.svg'
+import { ReactComponent as Logo } from '../assets/Logo.svg'
 import { Cabecalho } from '../styles'
 
 const Header = () => {

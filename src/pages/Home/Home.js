@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from '../Header/Header'
+import Header from '../../Header/Header'
 import Main from './Main/Main'
-import { MainContainer } from '../styles'
+import { MainContainer } from '../pages.styles'
 
 const Home = () => {
    return (

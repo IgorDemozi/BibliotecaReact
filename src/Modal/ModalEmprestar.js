@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
-import { BotaoEmprestar, DivFechar, EmprestarInputsContainer, InputCadastro, MenuEmprestar } from '../styles'
-import Fechar from '../imagens/Caminho_265.svg'
+import { EmprestarInputsContainer, MenuEmprestar } from './ModalEmprestar.styles.js'
+import { DivFechar } from './Modal.styles.js'
+import { BotaoEmprestar } from './ModalLivro.styles.js'
+import { TextfieldCadastro } from '../pages/Cadastro/CadastroForm.styles.js'
+import Fechar from '../assets/Caminho_265.svg'
 import dados from '../data.json'
 
 const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) => {
@@ -8,26 +11,8 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
    const [turma, setTurma] = useState('');
    const [retirada, setRetirada] = useState('');
    const [devolucao, setDevolucao] = useState('');
-
-   const [type1, setType1] = useState('text');
-   const [type2, setType2] = useState('text');
-
-   function setValores(event) {
-      if (event.target.placeholder === 'Nome do aluno') {
-         setAluno(event.target.value);
-      }
-      if (event.target.placeholder === 'Turma') {
-         setTurma(event.target.value);
-      }
-      if (event.target.placeholder === 'Data de retirada') {
-         setRetirada(event.target.value.split("-").reverse().join("/"));
-         event.target.blur();
-      }
-      if (event.target.placeholder === 'Data de devolução') {
-         setDevolucao(event.target.value.split("-").reverse().join("/"));
-         event.target.blur();
-      }
-   }
+   const [shrinkAluno, setShrinkAluno] = useState(false);
+   const [shrinkTurma, setShrinkTurma] = useState(false);
 
    function voltar() {
       setEmprestarAtivado(false);
@@ -36,12 +21,12 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
 
    function salvar(event) {
       event.preventDefault();
-      
+
       dados.data.books[index].rentHistory.push({
          studentName: aluno,
          class: turma,
-         withdrawalDate: retirada,
-         deliveryDate: devolucao
+         withdrawalDate: retirada.split("-").reverse().join("/"),
+         deliveryDate: devolucao.split("-").reverse().join("/")
       });
 
       dados.data.books[index].status.isRented = true;
@@ -73,43 +58,78 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
          </DivFechar>
 
          <EmprestarInputsContainer>
-            <InputCadastro
+            <TextfieldCadastro
                value={aluno}
-               onChange={setValores}
-               type='text' placeholder='Nome do aluno'
-               required
-            />
-
-            <InputCadastro
-               value={turma}
-               onChange={setValores}
+               onChange={(aluno) => setAluno(aluno.target.value)}
                type='text'
-               placeholder='Turma'
+               label='Nome do aluno'
                required
+               inputProps={{
+                  style: {
+                     height: "1rem",
+                     width: 285
+                  }
+               }}
+               InputLabelProps={{
+                  shrink: shrinkAluno,
+                  style: shrinkAluno ? undefined : { transform: 'translate(16px, 12px)' }
+               }}
+               onFocus={() => { setShrinkAluno(true) }}
+               onBlur={() => { if (aluno.length === 0) setShrinkAluno(false) }}
             />
 
-            <InputCadastro
+            <TextfieldCadastro
+               value={turma}
+               onChange={(turma) => setTurma(turma.target.value)}
+               type='text'
+               label='Turma'
+               required
+               inputProps={{
+                  style: {
+                     height: "1rem",
+                     width: 285
+                  }
+               }}
+               InputLabelProps={{
+                  shrink: shrinkTurma,
+                  style: shrinkTurma ? undefined : { transform: 'translate(16px, 12px)' }
+               }}
+               onFocus={() => { setShrinkTurma(true) }}
+               onBlur={() => { if (turma.length === 0) setShrinkTurma(false) }}
+            />
+
+            <TextfieldCadastro
                value={retirada}
-               type={type1}
-               onChange={setValores}
-               placeholder='Data de retirada'
-               onFocus={() => setType1('date')}
-               onBlur={() => setType1('text')}
+               onChange={(retirada) => setRetirada(retirada.target.value)}
+               type='date'
+               label='Data de retirada'
                required
+               inputProps={{
+                  style: {
+                     height: "1rem",
+                     width: 285
+                  }
+               }}
+               InputLabelProps={{ shrink: true }}
             />
 
-            <InputCadastro
+            <TextfieldCadastro
                value={devolucao}
-               type={type2}
-               onChange={setValores}
-               placeholder='Data de devolução'
-               onFocus={() => setType2('date')}
-               onBlur={() => setType2('text')}
+               onChange={(devolucao) => setDevolucao(devolucao.target.value)}
+               type='date'
+               label='Data de devolução'
                required
+               inputProps={{
+                  style: {
+                     height: "1rem",
+                     width: 285
+                  }
+               }}
+               InputLabelProps={{ shrink: true }}
             />
          </EmprestarInputsContainer>
 
-         <BotaoEmprestar>Emprestar</BotaoEmprestar>
+         <BotaoEmprestar type='submit'>Emprestar</BotaoEmprestar>
       </MenuEmprestar>
    )
 }

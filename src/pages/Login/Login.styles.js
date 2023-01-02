@@ -19,6 +19,20 @@ export const LoginContainer = styled.section`
    background-image: url(${Background});
    background-position-y: 65%;
    height: 100vh;
+
+   #form{
+      margin: 0;
+      background-color: white;
+      width: 370px;
+      height: 385px;
+      border-radius: 5px;
+      margin: 12vh 0;
+      padding: 2.5em;
+      box-shadow: 0 0 0 1000px rgba(60, 60, 60, 0.6);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+   }
 `
 export const LoginForm = styled.form`
    margin: 0;
@@ -54,7 +68,7 @@ export const LoginForm = styled.form`
    }
 
    .login-label {
-      transform: translate(20px, 20px) scale(1);
+      transform: translate(20px, 20px);
    }
 
    #loginBotao{

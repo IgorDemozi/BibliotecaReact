@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { DivFechar, MenuInativar } from './Modal.styles'
 import Fechar from '../assets/Caminho_265.svg'
-import dados from '../data.json'
 import { BotaoOpcoesModal } from './ModalLivro.styles'
 import { TextfieldCadastro } from '../pages/Cadastro/CadastroForm.styles'
+import { useFormik } from 'formik';
+import * as yup from 'yup'
+import axios from "axios"
 
-const ModalInativar = ({ index, setInativarAtivado, setModalLivroAtivado }) => {
+const ModalInativar = ({ livro, index, setInativarAtivado, setModalLivroAtivado }) => {
    const [motivo, setMotivo] = useState('');
+   var novosStatus = livro.status;
 
    function voltar() {
       setInativarAtivado(false);
@@ -14,31 +17,43 @@ const ModalInativar = ({ index, setInativarAtivado, setModalLivroAtivado }) => {
    }
 
    function salvar() {
-      dados.data.books[index].status.isActive = false;
-      dados.data.books[index].status.description = motivo;
+      novosStatus.isActive = false;
+      novosStatus.description = motivo;
 
-      var database = JSON.stringify(dados, null, '\t');
-
-      const salvarDados = async () => {
-         const criar = await window.showSaveFilePicker({
-            suggestedName: 'data.json',
-
-            types: [{
-               description: 'JSON',
-               accept: { 'application/json': ['.json'] }
-            }]
-         });
-         const escrever = await criar.createWritable();
-         await escrever.write(database);
-         await escrever.close();
-
-      }
-      salvarDados();
-      voltar();
+      axios.put(`http://localhost:3000/books/${index}`, {
+         title: livro.title,
+         author: livro.author,
+         genre: livro.genre,
+         status: novosStatus,
+         image: livro.image,
+         systemEntryDate: livro.systemEntryDate,
+         synopsis: livro.synopsis,
+         rentHistory: livro.rentHistory
+      }).then(resp => {
+         alert('Informações salvas com sucesso!');
+      }).catch(error => {
+         console.log(error);
+         alert('Algo deu errado...');
+      });
    }
 
+   const validationSchema = yup.object({
+      motivo: yup
+         .string('Digite o motivo')
+         .min(10, 'O motivo precisa ter, no mínimo, 10 caracteres')
+         .required('Este campo é obrigatório')
+   });
+
+   const formik = useFormik({
+      initialValues: { motivo: '' },
+      validationSchema: validationSchema,
+      onSubmit: () => {
+         salvar();
+      }
+   });
+
    return (
-      <MenuInativar onSubmit={salvar}>
+      <MenuInativar onSubmit={formik.handleSubmit}>
          <DivFechar>
             <h1>Inativar livro</h1>
             <img onClick={voltar} src={Fechar} alt='Fechar' />
@@ -46,22 +61,32 @@ const ModalInativar = ({ index, setInativarAtivado, setModalLivroAtivado }) => {
 
          <TextfieldCadastro
             type='text'
+            name='motivo'
             label='Motivo'
-            value={motivo}
-            onChange={(motivo) => setMotivo(motivo.target.value)}
+            value={formik.values.motivo}
+            onChange={(motivo) => { formik.handleChange(motivo); setMotivo(motivo.target.value) }}
             multiline
-            rows={2}
+            rows={3}
             inputProps={{
                style: {
                   height: "100%",
-                  border: 'none'
+                  border: 'none',
+                  padding: 0
                }
             }}
-            required
+            FormHelperTextProps={{
+               style: {
+                  position: 'absolute',
+                  transform: 'translate(-12px, 6rem)'
+               }
+            }}
+            error={formik.touched.motivo && Boolean(formik.errors.motivo)}
+            helperText={formik.touched.motivo && formik.errors.motivo}
          />
 
          <BotaoOpcoesModal
             type='submit'
+            id='inativar'
             sx={{
                border: '1px solid #ED5E5E',
                color: '#ED5E5E',

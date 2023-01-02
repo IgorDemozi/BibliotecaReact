@@ -30,12 +30,14 @@ const Modal = ({ setModalAtivado, livro, index }) => {
          }
 
          {emprestarAtivado && <ModalEmprestar
+            livro={livro}
             index={index}
             setEmprestarAtivado={setEmprestarAtivado}
             setModalLivroAtivado={setModalLivroAtivado} />
          }
 
          {inativarAtivado && <ModalInativar
+            livro={livro}
             index={index}
             setInativarAtivado={setInativarAtivado}
             setModalLivroAtivado={setModalLivroAtivado} />

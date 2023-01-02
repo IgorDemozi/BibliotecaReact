@@ -34,6 +34,14 @@ export const BibliotecaItensContainer = styled.div`
    justify-content: center;
    gap: 1rem;
    padding-bottom: 1.5rem;
+
+   #bibliotecaCarregandoInfo {
+      font: normal normal 400 16px Roboto;
+   }
+
+   @media screen and (min-width: 1330px) {
+      width: 1065px;
+   }
 `
 
 export const LupaImg = styled(Lupa)`

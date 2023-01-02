@@ -1,15 +1,16 @@
-import dados from '../data.json'
 import Fechar from '../assets/Caminho_265.svg'
 import InativadoInfo from './InativadoInfo'
 import EmprestadoInfo from './EmprestadoInfo'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BotaoDevolver, BotoesSection, CapaBotaoSection, DivFecharSimples, InfoBtSection, Informacoes, MenuLivro, SinopseFormatada, BotaoEmprestar, BotaoOpcoesModal } from './ModalLivro.styles.js'
+import axios from "axios"
 
 const ModalLivro = ({ livro, index, setModalAtivado, setEmprestarAtivado, setModalLivroAtivado, setInativarAtivado, setHistoricoAtivado }) => {
 
    const [livroEmprestado, setLivroEmprestado] = useState(false);
    const [livroAtivado, setLivroAtivado] = useState(false);
+   var novosStatus = livro.status;
 
    function abrirEmprestar() {
       setModalLivroAtivado(false);
@@ -29,49 +30,46 @@ const ModalLivro = ({ livro, index, setModalAtivado, setEmprestarAtivado, setMod
    function devolverLivro() {
       if (window.confirm('Confirmar devolução?')) {
 
-         dados.data.books[index].status.isRented = false;
-         var database = JSON.stringify(dados, null, '\t');
+         novosStatus.isRented = false;
 
-         const salvar = async () => {
-            const criar = await window.showSaveFilePicker({
-               suggestedName: 'data.json',
-
-               types: [{
-                  description: 'JSON',
-                  accept: { 'application/json': ['.json'] }
-               }]
-            });
-            const escrever = await criar.createWritable();
-            await escrever.write(database);
-            await escrever.close();
-            setModalLivroAtivado(true);
-         }
-         salvar();
+         axios.put(`http://localhost:3000/books/${index}`, {
+            title: livro.title,
+            author: livro.author,
+            genre: livro.genre,
+            status: novosStatus,
+            image: livro.image,
+            systemEntryDate: livro.systemEntryDate,
+            synopsis: livro.synopsis,
+            rentHistory: livro.rentHistory
+         }).then(resp => {
+            alert('Informações salvas com sucesso!');
+         }).catch(error => {
+            console.log(error);
+            alert('Algo deu errado...');
+         });
       }
    }
 
    function ativarLivro() {
       if (window.confirm('Confirmar ativação?')) {
+         novosStatus.isActive = true;
+         novosStatus.description = '';
 
-         dados.data.books[index].status.isActive = true;
-         dados.data.books[index].status.description = '';
-
-         var database = JSON.stringify(dados, null, '\t');
-
-         const salvar = async () => {
-            const criar = await window.showSaveFilePicker({
-               suggestedName: 'data.json',
-
-               types: [{
-                  description: 'JSON',
-                  accept: { 'application/json': ['.json'] }
-               }]
-            });
-            const escrever = await criar.createWritable();
-            await escrever.write(database);
-            await escrever.close();
-         }
-         salvar();
+         axios.put(`http://localhost:3000/books/${index}`, {
+            title: livro.title,
+            author: livro.author,
+            genre: livro.genre,
+            status: novosStatus,
+            image: livro.image,
+            systemEntryDate: livro.systemEntryDate,
+            synopsis: livro.synopsis,
+            rentHistory: livro.rentHistory
+         }).then(resp => {
+            alert('Informações salvas com sucesso!');
+         }).catch(error => {
+            console.log(error);
+            alert('Algo deu errado...');
+         });
       }
    }
 

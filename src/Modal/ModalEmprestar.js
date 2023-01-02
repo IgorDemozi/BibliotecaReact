@@ -4,9 +4,11 @@ import { DivFechar } from './Modal.styles.js'
 import { BotaoEmprestar } from './ModalLivro.styles.js'
 import { TextfieldCadastro } from '../pages/Cadastro/CadastroForm.styles.js'
 import Fechar from '../assets/Caminho_265.svg'
-import dados from '../data.json'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
+import axios from "axios"
 
-const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) => {
+const ModalEmprestar = ({ livro, index, setEmprestarAtivado, setModalLivroAtivado }) => {
    const [aluno, setAluno] = useState('');
    const [turma, setTurma] = useState('');
    const [retirada, setRetirada] = useState('');
@@ -14,44 +16,67 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
    const [shrinkAluno, setShrinkAluno] = useState(false);
    const [shrinkTurma, setShrinkTurma] = useState(false);
 
+   var historicoDeEmprestimos = [];
+   var novosStatus = livro.status;
+
+   livro.rentHistory.forEach(rent =>
+      historicoDeEmprestimos.push(rent)
+   )
+
+   const validationSchema = yup.object({
+      aluno: yup.string().required('Este campo é obrigatório'),
+      turma: yup.string().required('Este campo é obrigatório'),
+      retirada: yup.string().required('Este campo é obrigatório'),
+      devolucao: yup.string().required('Este campo é obrigatório')
+   });
+
+   const formik = useFormik({
+      initialValues: {
+         aluno: '',
+         turma: '',
+         retirada: '',
+         devolucao: ''
+      },
+      validationSchema: validationSchema,
+      onSubmit: () => {
+         salvar();
+      }
+   });
+
    function voltar() {
       setEmprestarAtivado(false);
       setModalLivroAtivado(true);
    }
 
-   function salvar(event) {
-      event.preventDefault();
-
-      dados.data.books[index].rentHistory.push({
+   function salvar() {
+      historicoDeEmprestimos.push({
          studentName: aluno,
          class: turma,
          withdrawalDate: retirada.split("-").reverse().join("/"),
          deliveryDate: devolucao.split("-").reverse().join("/")
       });
 
-      dados.data.books[index].status.isRented = true;
+      novosStatus.isRented = true;
 
-      var database = JSON.stringify(dados, null, '\t');
-
-      const salvar = async () => {
-         const criar = await window.showSaveFilePicker({
-            suggestedName: 'data.json',
-
-            types: [{
-               description: 'JSON',
-               accept: { 'application/json': ['.json'] }
-            }]
-         });
-         const escrever = await criar.createWritable();
-         await escrever.write(database);
-         await escrever.close();
-         voltar();
-      }
-      salvar();
+      axios.put(`http://localhost:3000/books/${index}`, {
+         title: livro.title,
+         author: livro.author,
+         genre: livro.genre,
+         status: novosStatus,
+         image: livro.image,
+         systemEntryDate: livro.systemEntryDate,
+         synopsis: livro.synopsis,
+         rentHistory: historicoDeEmprestimos
+      }).then(resp => {
+         alert('Informações salvas com sucesso!');
+      }).catch(error => {
+         console.log(error);
+         alert('Algo deu errado...');
+      });
    }
 
    return (
-      <MenuEmprestar onSubmit={salvar}>
+      <MenuEmprestar onSubmit={formik.handleSubmit}>
          <DivFechar>
             <h1>Informe os dados do aluno antes de continuar</h1>
             <img onClick={voltar} src={Fechar} alt='Fechar' />
@@ -60,10 +85,9 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
          <EmprestarInputsContainer>
             <TextfieldCadastro
                value={aluno}
-               onChange={(aluno) => setAluno(aluno.target.value)}
                type='text'
+               name='aluno'
                label='Nome do aluno'
-               required
                inputProps={{
                   style: {
                      height: "1rem",
@@ -76,14 +100,25 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
                }}
                onFocus={() => { setShrinkAluno(true) }}
                onBlur={() => { if (aluno.length === 0) setShrinkAluno(false) }}
+               onChange={(aluno) => {
+                  formik.handleChange(aluno);
+                  setAluno(aluno.target.value);
+               }}
+               error={formik.touched.aluno && Boolean(formik.errors.aluno)}
+               helperText={formik.touched.aluno && formik.errors.aluno}
+               FormHelperTextProps={{
+                  style: {
+                     position: 'absolute',
+                     transform: 'translate(9.6rem, 2.8rem)'
+                  }
+               }}
             />
 
             <TextfieldCadastro
                value={turma}
-               onChange={(turma) => setTurma(turma.target.value)}
                type='text'
+               name='turma'
                label='Turma'
-               required
                inputProps={{
                   style: {
                      height: "1rem",
@@ -96,14 +131,25 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
                }}
                onFocus={() => { setShrinkTurma(true) }}
                onBlur={() => { if (turma.length === 0) setShrinkTurma(false) }}
+               onChange={(turma) => {
+                  formik.handleChange(turma);
+                  setTurma(turma.target.value);
+               }}
+               error={formik.touched.turma && Boolean(formik.errors.turma)}
+               helperText={formik.touched.turma && formik.errors.turma}
+               FormHelperTextProps={{
+                  style: {
+                     position: 'absolute',
+                     transform: 'translate(9.6rem, 2.8rem)'
+                  }
+               }}
             />
 
             <TextfieldCadastro
                value={retirada}
-               onChange={(retirada) => setRetirada(retirada.target.value)}
                type='date'
+               name='retirada'
                label='Data de retirada'
-               required
                inputProps={{
                   style: {
                      height: "1rem",
@@ -111,14 +157,25 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
                   }
                }}
                InputLabelProps={{ shrink: true }}
+               onChange={(retirada) => {
+                  formik.handleChange(retirada);
+                  setRetirada(retirada.target.value);
+               }}
+               error={formik.touched.retirada && Boolean(formik.errors.retirada)}
+               helperText={formik.touched.retirada && formik.errors.retirada}
+               FormHelperTextProps={{
+                  style: {
+                     position: 'absolute',
+                     transform: 'translate(9.6rem, 2.8rem)'
+                  }
+               }}
             />
 
             <TextfieldCadastro
                value={devolucao}
-               onChange={(devolucao) => setDevolucao(devolucao.target.value)}
                type='date'
+               name='devolucao'
                label='Data de devolução'
-               required
                inputProps={{
                   style: {
                      height: "1rem",
@@ -126,6 +183,18 @@ const ModalEmprestar = ({ index, setEmprestarAtivado, setModalLivroAtivado }) =>
                   }
                }}
                InputLabelProps={{ shrink: true }}
+               onChange={(devolucao) => {
+                  formik.handleChange(devolucao);
+                  setDevolucao(devolucao.target.value);
+               }}
+               error={formik.touched.devolucao && Boolean(formik.errors.devolucao)}
+               helperText={formik.touched.devolucao && formik.errors.devolucao}
+               FormHelperTextProps={{
+                  style: {
+                     position: 'absolute',
+                     transform: 'translate(9.6rem, 2.8rem)'
+                  }
+               }}
             />
          </EmprestarInputsContainer>
 

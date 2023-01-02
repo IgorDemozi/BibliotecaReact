@@ -38,6 +38,10 @@ export const Tabela = styled.table`
       padding-left: 2rem;
    }
 
+   #carregandoInfo {
+      padding: 10px 0 10px 42px;
+   }
+
    tbody tr:last-child td {
       border-bottom: none;
    }

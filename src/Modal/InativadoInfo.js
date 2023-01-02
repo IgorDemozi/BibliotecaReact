@@ -1,7 +1,7 @@
 import React from 'react'
 import { InativadoInfoSection } from './Modal.styles.js'
 
-const InativadoInfo = ({livro}) => {
+const InativadoInfo = ({ livro }) => {
    return (
       <InativadoInfoSection>
          <h1>Informações da inativação</h1>

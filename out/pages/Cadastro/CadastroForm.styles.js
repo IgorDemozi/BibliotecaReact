@@ -1,7 +1,6 @@
 import { TextField } from '@mui/material';
 import styled from 'styled-components';
-
-export const CadastroContainer = styled.form`
+export const CadastroContainer = styled.form `
    width: 840px;
    margin-top: 12vh;
    display: flex;
@@ -77,9 +76,8 @@ export const CadastroContainer = styled.form`
          align-self: center;
       }
    }
-`
-
-export const InserirCapa = styled.label`
+`;
+export const InserirCapa = styled.label `
    display: flex;
    align-items: center;
    justify-content: center;
@@ -108,18 +106,17 @@ export const InserirCapa = styled.label`
       width: 100%;
       height: 100%;
    }
-`
-
+`;
 export const TextfieldCadastro = styled(TextField)({
-   '& label.Mui-focused': {
-      color: 'black',
-   },
-   '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-         borderColor: '#133052'
-      },
-      '&.Mui-focused fieldset': {
-         borderColor: 'black',
-      }
-   }
-})
+    '& label.Mui-focused': {
+        color: 'black',
+    },
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: '#133052'
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: 'black',
+        }
+    }
+});

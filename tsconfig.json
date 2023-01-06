@@ -1,0 +1,21 @@
+{
+   "compilerOptions": {
+      "target": "ESNext",
+      "strict": true,
+      "allowSyntheticDefaultImports": true,
+      "moduleResolution": "node",
+      "jsx": "react-jsx",
+      "allowJs": true,
+      "outDir": "./out",
+      "noImplicitAny": true,
+      "baseUrl": "src"
+   },
+   "include": [
+      "./src",
+      "src"
+   ],
+   "exclude": [
+      "./out",
+      "./node_modules"
+   ]
+}

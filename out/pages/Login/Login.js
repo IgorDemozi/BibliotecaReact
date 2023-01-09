@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useState } from 'react';
+import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
@@ -10,20 +10,10 @@ import axios from 'axios';
 import Logo from '../../assets/Logo.svg';
 const Login = () => {
     const navigate = useNavigate();
-    const [login, setLogin] = useState([{ email: '', password: '' }]);
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [shrinkEmail, setShrinkEmail] = useState(false);
     const [shrinkSenha, setShrinkSenha] = useState(false);
-    React.useEffect(() => {
-        axios.get('http://localhost:3000/login')
-            .then(resp => {
-            setLogin(resp.data);
-        })
-            .catch(error => {
-            console.log(error);
-        });
-    }, []);
     const validationSchema = yup.object({
         email: yup
             .string()
@@ -41,17 +31,20 @@ const Login = () => {
         },
         validationSchema: validationSchema,
         onSubmit: () => {
-            var i = 0;
-            login.forEach(item => {
-                if (email === item.email && senha === item.password) {
-                    i = 1;
-                    localStorage.setItem('atual-usuario', item.email);
+            axios.get(`http://localhost:3000/login?q=${email}`)
+                .then(resp => {
+                var usuario = resp.data[0];
+                if (usuario.password === senha) {
+                    localStorage.setItem('atual-usuario', usuario.email);
                     navigate('/home');
                 }
+                else {
+                    alert('Usuário inválido ou senha inválida');
+                }
+            })
+                .catch(error => {
+                console.log(error);
             });
-            if (i === 0) {
-                alert('Usuário inválido ou senha inválida');
-            }
         }
     });
     return (_jsx(LoginContainer, { children: _jsxs(LoginForm, { onSubmit: formik.handleSubmit, children: [_jsx("img", { id: 'Logotipo', src: Logo, alt: 'Logotipo da biblioteca' }), _jsx(TextField, { type: 'email', name: 'email', id: 'loginEmail', label: 'Email', InputLabelProps: {

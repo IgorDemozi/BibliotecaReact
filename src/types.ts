@@ -20,6 +20,11 @@ export type Livro = {
    }[]
 }
 
+export type Usuario = {
+   email: string;
+   password: string;
+}
+
 export type rentHistory = {
    studentName: string;
    class: string;

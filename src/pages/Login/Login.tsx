@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import { EsqueceuSenha, LoginContainer, LoginForm } from './Login.styles'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import axios from 'axios'
-import Logo from '../../assets/Logo.svg'
+import Logo from 'assets/Logo.svg'
 import { Usuario } from 'types'
+import { Api } from 'api'
 
 const Login = () => {
    const navigate = useNavigate();
@@ -34,7 +34,7 @@ const Login = () => {
       },
       validationSchema: validationSchema,
       onSubmit: () => {
-         axios.get(`http://localhost:3000/login?q=${email}`)
+         Api.get(`/login?q=${email}`)
             .then(resp => {
                var usuario: Usuario = resp.data[0];
 
@@ -74,7 +74,7 @@ const Login = () => {
                FormHelperTextProps={{
                   style: {
                      position: 'absolute',
-                     transform: 'translate(-12px, 3.7rem)'
+                     transform: 'translate(-0.75rem, 3.7rem)'
                   }
                }}
             />
@@ -97,7 +97,7 @@ const Login = () => {
                FormHelperTextProps={{
                   style: {
                      position: 'absolute',
-                     transform: 'translate(-12px, 3.7rem)'
+                     transform: 'translate(-0.75rem, 3.7rem)'
                   }
                }}
             />

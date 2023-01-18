@@ -24,7 +24,7 @@ const Card = ({ txt, rota, alt, imagem }: CardInterface) => {
             <CardContent
                component='div'
                sx={{
-                  height: '120px',
+                  height: '7.5rem',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -32,7 +32,7 @@ const Card = ({ txt, rota, alt, imagem }: CardInterface) => {
 
                <CardMedia
                   component='img'
-                  sx={{ width: '46px' }}
+                  sx={{ width: '2.875rem' }}
                   image={imagem}
                   alt={alt}
                />

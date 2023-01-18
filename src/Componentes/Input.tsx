@@ -1,11 +1,4 @@
-interface InputProps {
-   type?: string;
-   id?: string;
-   value: string;
-   onChange: any;
-   maxLength?: number;
-   placeholder?: string;
-}
+import { InputProps } from "types"
 
 const Input = ({ id, type, value, onChange, maxLength, placeholder }: InputProps) => {
    return (

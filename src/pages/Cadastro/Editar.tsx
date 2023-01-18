@@ -1,4 +1,4 @@
-import Header from '../../Header/Header';
+import Header from '../../Componentes/Header/Header';
 import EditarForm from './EditarForm';
 import { MainContainer } from '../pages.styles';
 import { useLocation } from 'react-router-dom';
@@ -12,12 +12,11 @@ interface LocationProps {
 const Editar = () => {
    const state = useLocation().state as LocationProps;
    const livro: Livro = state.livro;
-   const index: number = state.index;
 
    return (
       <MainContainer>
          <Header />
-         <EditarForm livro={livro} index={index} />
+         <EditarForm livro={livro} />
       </MainContainer>
    )
 }

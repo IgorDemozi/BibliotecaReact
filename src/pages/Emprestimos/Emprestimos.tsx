@@ -1,5 +1,5 @@
-import Header from '../../Header/Header'
-import { MainContainer } from '../pages.styles'
+import Header from 'Componentes/Header/Header'
+import { MainContainer } from 'pages/pages.styles'
 import EmprestimosForm from './EmprestimosForm'
 
 const Emprestimos = () => {

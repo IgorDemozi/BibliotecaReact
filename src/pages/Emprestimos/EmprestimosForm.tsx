@@ -1,7 +1,6 @@
-import React, { useState, ChangeEvent } from 'react'
+import React, { useState, ChangeEvent, useEffect, useReducer, useRef } from 'react'
 import { LinkParaHome, VoltarPraHome, ContainerGeral, SetaEsquerda } from 'pages/pages.styles'
-import axios from "axios"
-import { Livro } from 'types'
+import { Livro, RentHistory } from 'types'
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,6 +9,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import TabelaInput from 'Componentes/TabelaInput';
+import { Api } from 'api';
 
 const StyledTableCell = styled(TableCell)(() => ({
    [`&.${tableCellClasses.head}`]: {
@@ -19,11 +20,11 @@ const StyledTableCell = styled(TableCell)(() => ({
       fontSize: 18,
 
       '&:nth-of-type(1)': {
-         borderRadius: '5px 0 0 0',
+         borderRadius: '0.25rem 0 0 0',
       },
 
       '&:last-of-type': {
-         borderRadius: '0 5px 0 0',
+         borderRadius: '0 0.25rem 0 0',
       }
    },
    [`&.${tableCellClasses.body}`]: {
@@ -32,35 +33,103 @@ const StyledTableCell = styled(TableCell)(() => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-   height: '74px',
+   height: '4.625rem',
    '&:nth-of-type(even)': {
       backgroundColor: theme.palette.action.hover,
    },
    '&:last-child td, &:last-child th': {
       border: 0,
-      borderRadius: '5px 0 0 0',
+      borderRadius: '0.25rem 0 0 0',
       boxShadow: '0'
    },
 }));
 
 const EmprestimosForm = () => {
    const [books, setBooks] = useState<Livro[]>();
+   const [listaFinal, setListaFinal] = useState<RentHistory[]>([]);
    const [aluno, setAluno] = useState('');
    const [turma, setTurma] = useState('');
-   const [livro, setLivro] = useState('');
+   const [titulo, setTitulo] = useState('');
    const [retirada, setRetirada] = useState('');
    const [entrega, setEntrega] = useState('');
+   const [, forceUpdate] = useReducer(x => x + 1, 0);
+   const asc = useRef(true);
+   const identificador = useRef(0);
 
-   React.useEffect(() => {
-      axios.get('http://localhost:3000/books')
+   useEffect(() => {
+      Api.get('books')
          .then(resp => {
-            var data: Livro[] = resp.data;
+            let data: Livro[] = resp.data;
+            let lista: RentHistory[] = [];
             setBooks(data);
+            data.forEach(book => {
+               book.rentHistory.forEach(rent => {
+                  let emprestimo: RentHistory = {
+                     title: book.title,
+                     class: rent.class,
+                     studentName: rent.studentName,
+                     withdrawalDate: rent.withdrawalDate,
+                     deliveryDate: rent.deliveryDate
+                  };
+                  lista.push(emprestimo)
+               })
+            })
+            setListaFinal(lista);
          })
          .catch(error => {
             console.log(error);
          });
    }, [])
+
+   function ordenarLista(lista: RentHistory[], campo: string, id: number): void {
+      if (id !== identificador.current) asc.current = true;
+      let field = campo as keyof RentHistory
+
+      if (asc.current && (field === 'withdrawalDate' || field === 'deliveryDate')) {
+         lista.sort(function (a, b) {
+            let anoMesDiaA = a[field]!.split('/').reverse().map(Number);
+            let anoMesDiaB = b[field]!.split('/').reverse().map(Number);
+            let dataA = new Date(anoMesDiaA[0], anoMesDiaA[1] - 1, anoMesDiaA[2]);
+            let dataB = new Date(anoMesDiaB[0], anoMesDiaB[1] - 1, anoMesDiaB[2]);
+
+            return dataA.valueOf() - dataB.valueOf();
+         })
+      } else if (field === 'withdrawalDate' || field === 'deliveryDate') {
+         lista.sort((b, a) => {
+            let anoMesDiaA = a[field]!.split('/').reverse().map(Number);
+            let anoMesDiaB = b[field]!.split('/').reverse().map(Number);
+            let dataA = new Date(anoMesDiaA[0], anoMesDiaA[1] - 1, anoMesDiaA[2]);
+            let dataB = new Date(anoMesDiaB[0], anoMesDiaB[1] - 1, anoMesDiaB[2]);
+
+            return dataA.valueOf() - dataB.valueOf();
+         })
+      } else if (asc.current) {
+         lista.sort(function (a, b) {
+            if (a[field]! < b[field]!) {
+               return -1;
+            }
+            if (a[field]! > b[field]!) {
+               return 1;
+            }
+            return 0;
+         })
+      } else {
+         lista.sort(function (b, a) {
+            if (a[field]! < b[field]!) {
+               return -1;
+            }
+            if (a[field]! > b[field]!) {
+               return 1;
+            }
+            return 0;
+         })
+      }
+
+      setListaFinal(lista);
+      asc.current = !asc.current
+      identificador.current = id;
+      forceUpdate();
+   }
 
    return (
       <ContainerGeral>
@@ -85,46 +154,43 @@ const EmprestimosForm = () => {
                <TableHead>
                   <TableRow>
                      <StyledTableCell>Aluno</StyledTableCell>
-                     <StyledTableCell align="center">Turma</StyledTableCell>
-                     <StyledTableCell align="center">Livro</StyledTableCell>
-                     <StyledTableCell align="right">Data de retirada</StyledTableCell>
-                     <StyledTableCell align="right"> Data de entrega</StyledTableCell>
+                     <StyledTableCell>Turma</StyledTableCell>
+                     <StyledTableCell>Livro</StyledTableCell>
+                     <StyledTableCell>Data de retirada</StyledTableCell>
+                     <StyledTableCell>Data de entrega</StyledTableCell>
                   </TableRow>
                </TableHead>
 
                <TableBody>
                   <StyledTableRow >
                      <StyledTableCell component="th" scope="row">
-                        <input
-                           className='tabelaInput'
-                           type="text"
+                        <TabelaInput
                            value={aluno}
+                           onClick={() => { ordenarLista(listaFinal, 'studentName', 1); }}
                            onChange={
                               (aluno: ChangeEvent<HTMLInputElement>) => setAluno(aluno.target.value)
-                           }
-                        />
+                           } />
                      </StyledTableCell>
                      <StyledTableCell>
-                        <input
-                           className='tabelaInput'
-                           type="text"
+                        <TabelaInput
                            value={turma}
-                           onChange={(turma: ChangeEvent<HTMLInputElement>) => setTurma(turma.target.value)}
-                        />
+                           onClick={() => { ordenarLista(listaFinal, 'class', 2) }}
+                           onChange={
+                              (turma: ChangeEvent<HTMLInputElement>) => setTurma(turma.target.value)
+                           } />
                      </StyledTableCell>
                      <StyledTableCell>
-                        <input
-                           className='tabelaInput'
-                           type="text"
-                           value={livro}
-                           onChange={(livro: ChangeEvent<HTMLInputElement>) => setLivro(livro.target.value)}
-                        />
+                        <TabelaInput
+                           value={titulo}
+                           onClick={() => { ordenarLista(listaFinal, 'title', 3) }}
+                           onChange={
+                              (titulo: ChangeEvent<HTMLInputElement>) => setTitulo(titulo.target.value)
+                           } />
                      </StyledTableCell>
                      <StyledTableCell>
-                        <input
-                           className='tabelaInput'
-                           type="text"
+                        <TabelaInput
                            value={retirada}
+                           onClick={() => { ordenarLista(listaFinal, 'withdrawalDate', 4) }}
                            onChange={
                               (retirada: ChangeEvent<HTMLInputElement>) => setRetirada(retirada.target.value)
                            }
@@ -132,14 +198,13 @@ const EmprestimosForm = () => {
                         />
                      </StyledTableCell>
                      <StyledTableCell>
-                        <input
-                           className='tabelaInput'
-                           type="text"
-                           maxLength={10}
+                        <TabelaInput
                            value={entrega}
+                           onClick={() => { ordenarLista(listaFinal, 'deliveryDate', 5) }}
                            onChange={
                               (entrega: ChangeEvent<HTMLInputElement>) => setEntrega(entrega.target.value)
                            }
+                           maxLength={10}
                         />
                      </StyledTableCell>
                   </StyledTableRow>
@@ -153,35 +218,28 @@ const EmprestimosForm = () => {
                         <StyledTableCell></StyledTableCell>
                      </StyledTableRow>
                      :
-                     books.map((item: Livro) => {
-                        if (item.rentHistory.length > 0) {
-                           return (
-                              item.rentHistory.map((element, index) => {
-                                 return (
-                                    <React.Fragment key={index}>
-                                       {element.studentName.toLowerCase().includes(aluno.toLowerCase()) &&
-                                          element.class.toLowerCase().includes(turma.toLowerCase()) &&
-                                          item.title.toLowerCase().includes(livro.toLowerCase()) &&
-                                          element.withdrawalDate.toLowerCase().includes(retirada.toLowerCase()) &&
-                                          element.deliveryDate.toLowerCase().includes(entrega.toLowerCase()) ?
-                                          <StyledTableRow>
-                                             <StyledTableCell component="th" scope="row">
-                                                {element.studentName}
-                                             </StyledTableCell>
-                                             <StyledTableCell align="center">{element.class}</StyledTableCell>
-                                             <StyledTableCell align="left">{item.title}</StyledTableCell>
-                                             <StyledTableCell align="right">{element.withdrawalDate}
-                                             </StyledTableCell>
-                                             <StyledTableCell align="right">{element.deliveryDate}
-                                             </StyledTableCell>
-                                          </StyledTableRow>
-                                          : null}
-                                    </React.Fragment>
-                                 )
-                              })
-                           )
-                        }
-                        return null;
+                     listaFinal && listaFinal.map((element, index) => {
+                        return (
+                           <React.Fragment key={index}>
+                              {element.studentName.toLowerCase().includes(aluno.toLowerCase()) &&
+                                 element.class.toLowerCase().includes(turma.toLowerCase()) &&
+                                 element.title!.toLowerCase().includes(titulo.toLowerCase()) &&
+                                 element.withdrawalDate.toLowerCase().includes(retirada.toLowerCase()) &&
+                                 element.deliveryDate.toLowerCase().includes(entrega.toLowerCase()) ?
+                                 <StyledTableRow>
+                                    <StyledTableCell component="th" scope="row">
+                                       {element.studentName}
+                                    </StyledTableCell>
+                                    <StyledTableCell>{element.class}</StyledTableCell>
+                                    <StyledTableCell>{element.title}</StyledTableCell>
+                                    <StyledTableCell>{element.withdrawalDate}
+                                    </StyledTableCell>
+                                    <StyledTableCell>{element.deliveryDate}
+                                    </StyledTableCell>
+                                 </StyledTableRow>
+                                 : null}
+                           </React.Fragment>
+                        )
                      })
                   }
                </TableBody>

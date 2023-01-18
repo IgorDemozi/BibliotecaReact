@@ -3,21 +3,11 @@ export type Livro = {
    title: string;
    author: string;
    genre: string;
-   status: {
-      isRented: boolean;
-      isActive: boolean;
-      description: string;
-   };
+   status: Status;
    image: string;
    systemEntryDate: string;
    synopsis: string;
-   rentHistory:
-   {
-      studentName: string;
-      class: string;
-      withdrawalDate: string;
-      deliveryDate: string
-   }[]
+   rentHistory: RentHistory[];
 }
 
 export type Usuario = {
@@ -25,11 +15,28 @@ export type Usuario = {
    password: string;
 }
 
-export type rentHistory = {
+export type Status = {
+   isRented: boolean;
+   isActive: boolean;
+   description: string;
+}
+
+export type RentHistory = {
    studentName: string;
    class: string;
+   title?: string;
    withdrawalDate: string;
    deliveryDate: string
+}
+
+export interface InputProps {
+   type?: string;
+   id?: string;
+   value: string;
+   onChange: any;
+   onClick?: any;
+   maxLength?: number;
+   placeholder?: string;
 }
 
 export interface CardInterface {
@@ -41,7 +48,6 @@ export interface CardInterface {
 
 export interface ModalProps {
    livro: Livro;
-   index?: number;
    setModalAtivado?: React.Dispatch<React.SetStateAction<boolean>>;
    setModalLivroAtivado?: React.Dispatch<React.SetStateAction<boolean>>;
    setEmprestarAtivado?: React.Dispatch<React.SetStateAction<boolean>>;

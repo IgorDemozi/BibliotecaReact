@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 export const CardsDiv = styled.div ` 
-   width: 820px;
+   width: 51.25rem;
    flex-wrap: wrap;
    display: flex;
    align-items: center;
    gap: 2rem;
 
-   @media screen and (max-width: 920px) {
+   @media screen and (max-width: 57.5rem) {
       flex-direction: column;
    }
 `;
@@ -20,7 +20,7 @@ export const ContainerMain = styled.div `
    justify-content: center;
    flex-grow: 1;
 
-   @media screen and (max-width: 920px) {
+   @media screen and (max-width: 57.5rem) {
         padding: 1rem 0;
    }
 `;

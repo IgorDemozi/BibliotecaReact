@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { EsqueceuSenha, LoginContainer, LoginForm } from './Login.styles';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import axios from 'axios';
-import Logo from '../../assets/Logo.svg';
+import Logo from 'assets/Logo.svg';
+import { Api } from 'api';
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
@@ -31,7 +31,7 @@ const Login = () => {
         },
         validationSchema: validationSchema,
         onSubmit: () => {
-            axios.get(`http://localhost:3000/login?q=${email}`)
+            Api.get(`/login?q=${email}`)
                 .then(resp => {
                 var usuario = resp.data[0];
                 if (usuario.password === senha) {
@@ -54,7 +54,7 @@ const Login = () => {
                         setShrinkEmail(false); }, error: formik.touched.email && Boolean(formik.errors.email), helperText: formik.touched.email && formik.errors.email, FormHelperTextProps: {
                         style: {
                             position: 'absolute',
-                            transform: 'translate(-12px, 3.7rem)'
+                            transform: 'translate(-0.75rem, 3.7rem)'
                         }
                     } }), _jsx(TextField, { type: 'password', name: 'password', id: 'loginSenha', label: 'Senha', InputLabelProps: {
                         shrink: shrinkSenha,
@@ -63,7 +63,7 @@ const Login = () => {
                         setShrinkSenha(false); }, error: formik.touched.password && Boolean(formik.errors.password), helperText: formik.touched.password && formik.errors.password, FormHelperTextProps: {
                         style: {
                             position: 'absolute',
-                            transform: 'translate(-12px, 3.7rem)'
+                            transform: 'translate(-0.75rem, 3.7rem)'
                         }
                     } }), _jsx(EsqueceuSenha, { to: '/home', children: "Esqueci minha senha" }), _jsx(Button, { id: 'loginBotao', type: 'submit', children: "Entrar" })] }) }));
 };

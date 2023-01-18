@@ -16,6 +16,6 @@ export const CardLink = styled(Link) `
 
    #div-do-paragrafo {
       padding: 0;
-      margin-bottom: 4px;
+      margin-bottom: 0.25rem;
    }
 `;

@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import Background from '../../assets/emil-widlund-xrbbXIXAWY0-unsplash.png';
-import IconeEmail from '../../assets/Grupo_37.svg';
-import IconeSenha from '../../assets/Grupo_36.svg';
+import Background from 'assets/emil-widlund-xrbbXIXAWY0-unsplash.png';
+import IconeEmail from 'assets/Grupo_37.svg';
+import IconeSenha from 'assets/Grupo_36.svg';
 import { Link } from 'react-router-dom';
 export const EsqueceuSenha = styled(Link) `
 color: black;
-font: normal normal bold 14px/19px Roboto;
+font: normal normal bold 0.875rem/1.188rem Roboto;
 align-self: flex-start;
 `;
 export const LoginContainer = styled.section `
@@ -16,30 +16,16 @@ export const LoginContainer = styled.section `
    background-image: url(${Background});
    background-position-y: 65%;
    height: 100vh;
-
-   #form{
-      margin: 0;
-      background-color: white;
-      width: 370px;
-      height: 385px;
-      border-radius: 5px;
-      margin: 12vh 0;
-      padding: 2.5em;
-      box-shadow: 0 0 0 1000px rgba(60, 60, 60, 0.6);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-   }
 `;
 export const LoginForm = styled.form `
    margin: 0;
    background-color: white;
-   width: 370px;
-   height: 385px;
-   border-radius: 5px;
+   width: 23.125rem;
+   height: 24.063rem;
+   border-radius: 0.25rem;
    margin: 12vh 0;
-   padding: 2.5em;
-   box-shadow: 0 0 0 1000px rgba(60, 60, 60, 0.6);
+   padding: 2.5rem;
+   box-shadow: 0 0 0 62.5rem rgba(60, 60, 60, 0.6);
    display: flex;
    flex-direction: column;
    justify-content: space-between;
@@ -47,8 +33,8 @@ export const LoginForm = styled.form `
    #loginEmail {
       background-color: #e3e5e7;
       padding: 1.5em;
-      border-radius: 5px;
-      font: 14px Roboto;
+      border-radius: 0.25rem;
+      font: 0.875rem Roboto;
       background-image: url(${IconeEmail});
       background-repeat: no-repeat;
       background-position: 94%;
@@ -57,25 +43,25 @@ export const LoginForm = styled.form `
    #loginSenha {
       background-color: #e3e5e7;
       padding: 1.5em;
-      border-radius: 5px;
-      font: 14px Roboto;
+      border-radius: 0.25rem;
+      font: 0.875rem Roboto;
       background-image: url(${IconeSenha});
       background-repeat: no-repeat;
       background-position: 94%;
    }
 
    .login-label {
-      transform: translate(20px, 20px);
+      transform: translate(1.25rem, 1.25rem);
    }
 
    #loginBotao{
       padding: 1rem 2rem;
-      border-radius: 5px;
+      border-radius: 0.25rem;
       border: 0;
       background-color: #FFC501;
       color: black;
       text-transform: uppercase;
-      font: normal normal bold 16px/21px Roboto;
+      font: normal normal bold 1rem/1.313rem Roboto;
       cursor: pointer;
    }
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Filtro from './assets/Caminho_147.svg';
+import Filtro from 'assets/Caminho_147.svg';
 export const Cabecalho = styled.header `
    background-color: white;
    height: 96px;

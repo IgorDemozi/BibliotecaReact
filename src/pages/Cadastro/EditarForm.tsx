@@ -1,24 +1,22 @@
-import IconeAdicionar from '../../assets/Caminho 261.svg';
+import IconeAdicionar from 'assets/Caminho 261.svg';
 import ButtonMUI from '@mui/material/Button'
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useRef, useState } from 'react'
 import { CadastroContainer, InserirCapa, TextfieldCadastro } from './CadastroForm.styles'
-import { ContainerGeral, VoltarPraHome, LinkParaHome, SetaEsquerda } from '../pages.styles'
+import { ContainerGeral, VoltarPraHome, LinkParaHome, SetaEsquerda } from 'pages/pages.styles'
 import { useNavigate } from 'react-router-dom'
 import { MenuItem } from '@mui/material';
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import axios from "axios"
-import { Livro, ModalProps } from '../../types';
+import { Livro, ModalProps } from 'types';
+import { Api } from 'api';
+import { isBefore } from 'date-fns';
 
-const EditarForm = ({ livro, index }: ModalProps) => {
+const EditarForm = ({ livro }: ModalProps) => {
    const [books, setBooks] = useState<Livro[]>();
-   const [titulo, setTitulo] = useState(livro.title);
-   const [autor, setAutor] = useState(livro.author);
-   const [genero, setGenero] = useState(livro.genre);
    const [base64, setBase64] = useState(livro.image);
-   const [sinopse, setSinopse] = useState(livro.synopsis);
    const [data, setData] = useState(livro.systemEntryDate);
    const [imgNoInput, setImgNoInput] = useState(true);
+   const diaHoje = useRef(new Date());
    const navigate = useNavigate();
    var generos: string[] = [];
 
@@ -27,14 +25,30 @@ const EditarForm = ({ livro, index }: ModalProps) => {
    }, [data]);
 
    React.useEffect(() => {
-      axios.get('http://localhost:3000/books')
+      Api.get('/books')
          .then(resp => {
             setBooks(resp.data);
          })
          .catch(error => {
             console.log(error);
          });
+
+      let hoje = new Date();
+      let dataHoje: string = (hoje.getMonth() + 1) + '/' + hoje.getDate() + '/' + hoje.getFullYear();
+      let dia = new Date(dataHoje);
+      diaHoje.current = dia;
    }, [])
+
+   function inputDateHandleChange(event: ChangeEvent<HTMLInputElement>) {
+      let anoMesDia = event.target.value.split('-').map(Number);
+      let dataSelecionada = new Date(anoMesDia[0], anoMesDia[1] -1 , anoMesDia[2]);
+
+      if (isBefore(dataSelecionada, diaHoje.current)) {
+         alert('A data escolhida já passou');
+      } else {
+         formik.handleChange(event);
+      }
+   }
 
    const validationSchema = yup.object({
       titulo: yup.string().required('Este campo é obrigatório'),
@@ -46,15 +60,16 @@ const EditarForm = ({ livro, index }: ModalProps) => {
 
    const formik = useFormik({
       initialValues: {
-         titulo: titulo,
-         sinopse: sinopse,
-         autor: autor,
-         genero: genero,
-         data: data
+         titulo: livro.title,
+         sinopse: livro.synopsis,
+         autor: livro.author,
+         genero: livro.genre,
+         data: livro.systemEntryDate
       },
       validationSchema: validationSchema,
       onSubmit: () => {
          salvar();
+         navigate('/biblioteca', {state: livro});
       }
    });
 
@@ -74,22 +89,20 @@ const EditarForm = ({ livro, index }: ModalProps) => {
 
    function retornarParaBiblioteca() {
       if (window.confirm('Tem certeza de que quer cancelar? Você retornará à biblioteca.')) {
-         navigate('/biblioteca');
+         navigate('/biblioteca', {state: livro});
       }
    }
 
    function salvar() {
-      var dataFormatada = data.split("-").reverse().join("/");
+      let dataFormatada = data.split("-").reverse().join("/");
 
-      axios.put(`http://localhost:3000/books/${index}`, {
-         title: titulo,
-         author: autor,
-         genre: genero,
-         status: livro.status,
+      Api.patch(`books/${livro.id}`, {
+         title: formik.values.titulo,
+         author: formik.values.autor,
+         genre: formik.values.genero,
          image: base64,
          systemEntryDate: dataFormatada,
-         synopsis: sinopse,
-         rentHistory: livro.rentHistory
+         synopsis: formik.values.sinopse
       }).then(resp => {
          alert('Informações salvas com sucesso!');
       }).catch(error => {
@@ -122,7 +135,7 @@ const EditarForm = ({ livro, index }: ModalProps) => {
       <ContainerGeral>
          <VoltarPraHome>
             <p>
-               <LinkParaHome to='/biblioteca'>
+               <LinkParaHome to='/biblioteca' state={livro}>
                   <SetaEsquerda /> Biblioteca
                </LinkParaHome> / <b>Editar livro</b>
             </p>
@@ -152,14 +165,11 @@ const EditarForm = ({ livro, index }: ModalProps) => {
                      type='text'
                      name='titulo'
                      label='Título'
-                     value={titulo}
-                     onChange={(titulo) => {
-                        formik.handleChange(titulo);
-                        setTitulo(titulo.target.value);
-                     }}
+                     value={formik.values.titulo}
+                     onChange={formik.handleChange}
                      inputProps={{
                         style: {
-                           height: "20px"
+                           height: "1.25rem"
                         }
                      }}
                      error={formik.touched.titulo && Boolean(formik.errors.titulo)}
@@ -167,7 +177,7 @@ const EditarForm = ({ livro, index }: ModalProps) => {
                      FormHelperTextProps={{
                         style: {
                            position: 'absolute',
-                           transform: 'translate(-12px, 3.1rem)'
+                           transform: 'translate(-0.75rem, 3.1rem)'
                         }
                      }}
                   />
@@ -176,16 +186,13 @@ const EditarForm = ({ livro, index }: ModalProps) => {
                      type='text'
                      name='sinopse'
                      label='Sinopse'
-                     value={sinopse}
-                     onChange={(sinopse) => {
-                        formik.handleChange(sinopse);
-                        setSinopse(sinopse.target.value)
-                     }}
+                     value={formik.values.sinopse}
+                     onChange={formik.handleChange}
                      multiline
                      rows={4}
                      inputProps={{
                         style: {
-                           height: "98px"
+                           height: "6.125rem"
                         }
                      }}
                      error={formik.touched.sinopse && Boolean(formik.errors.sinopse)}
@@ -193,7 +200,7 @@ const EditarForm = ({ livro, index }: ModalProps) => {
                      FormHelperTextProps={{
                         style: {
                            position: 'absolute',
-                           transform: 'translate(-12px, 8rem)'
+                           transform: 'translate(-0.75rem, 8rem)'
                         }
                      }}
                   />
@@ -204,22 +211,19 @@ const EditarForm = ({ livro, index }: ModalProps) => {
                      type='text'
                      name='autor'
                      label='Autor'
-                     value={autor}
-                     onChange={(autor) => {
-                        formik.handleChange(autor);
-                        setAutor(autor.target.value)
-                     }}
+                     value={formik.values.autor}
+                     onChange={formik.handleChange}
                      error={formik.touched.autor && Boolean(formik.errors.autor)}
                      helperText={formik.touched.autor && formik.errors.autor}
                      inputProps={{
                         style: {
-                           height: "20px"
+                           height: "1.25rem"
                         }
                      }}
                      FormHelperTextProps={{
                         style: {
                            position: 'absolute',
-                           transform: 'translate(-12px, 3.1rem)'
+                           transform: 'translate(-0.75rem, 3.1rem)'
                         }
                      }}
                   />
@@ -228,11 +232,8 @@ const EditarForm = ({ livro, index }: ModalProps) => {
                      select
                      name='genero'
                      label='Gênero'
-                     value={genero}
-                     onChange={(genero) => {
-                        formik.handleChange(genero);
-                        setGenero(genero.target.value);
-                     }}
+                     value={formik.values.genero}
+                     onChange={formik.handleChange}
                      error={formik.touched.genero && Boolean(formik.errors.genero)}
                      helperText={formik.touched.genero && formik.errors.genero}
                      sx={{
@@ -243,7 +244,7 @@ const EditarForm = ({ livro, index }: ModalProps) => {
                      FormHelperTextProps={{
                         style: {
                            position: 'absolute',
-                           transform: 'translate(-12px, 3.1rem)'
+                           transform: 'translate(-0.75rem, 3.1rem)'
                         }
                      }}
                   >
@@ -259,23 +260,20 @@ const EditarForm = ({ livro, index }: ModalProps) => {
                      type='date'
                      name='data'
                      label='Data'
-                     value={data}
                      inputProps={{
                         style: {
-                           height: "20px"
+                           height: "1.25rem"
                         }
                      }}
                      InputLabelProps={{ shrink: true }}
-                     onChange={(data) => {
-                        formik.handleChange(data);
-                        setData(data.target.value);
-                     }}
+                     value={formik.values.data}
+                     onChange={inputDateHandleChange}
                      error={formik.touched.data && Boolean(formik.errors.data)}
                      helperText={formik.touched.data && formik.errors.data}
                      FormHelperTextProps={{
                         style: {
                            position: 'absolute',
-                           transform: 'translate(-12px, 3.1rem)'
+                           transform: 'translate(-0.75rem, 3.1rem)'
                         }
                      }}
                   />

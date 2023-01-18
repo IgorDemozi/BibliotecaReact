@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import Header from '../../Header/Header';
+import Header from '../../Componentes/Header/Header';
 import Main from './Main/Main';
 import { MainContainer } from '../pages.styles';
 const Home = () => {

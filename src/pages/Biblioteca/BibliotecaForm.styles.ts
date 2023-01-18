@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { ReactComponent as Lupa } from '../../assets/Caminho_263.svg';
+import { ReactComponent as Lupa } from 'assets/Caminho_263.svg';
 
 export const BibliotecaItem = styled.div`
-   width: 200px;
-   height: 240px;
+   width: 12.5rem;
+   height: 15rem;
    background-color: #e6e6e6;
-   border-radius: 5px;
+   border-radius: 0.25rem;
    display: flex;
    flex-direction: column;
    align-items: center;
@@ -15,13 +15,13 @@ export const BibliotecaItem = styled.div`
    p {
       text-align: center;
       margin: 0.5rem 0 0 0;
-      font: normal normal medium 16px/21px Roboto;
+      font: normal normal medium 1rem/1.313rem Roboto;
       color: #3E4756;
    }
 
    img {
-      height: 180px;
-      width: 120px;
+      height: 11.25rem;
+      width: 7.5rem;
    }
 `
 
@@ -35,11 +35,11 @@ export const BibliotecaItensContainer = styled.div`
    padding-bottom: 1.5rem;
 
    #bibliotecaCarregandoInfo {
-      font: normal normal 400 16px Roboto;
+      font: normal normal 400 1rem Roboto;
    }
 
-   @media screen and (min-width: 1330px) {
-      width: 1065px;
+   @media screen and (min-width: 83.125rem) {
+      width: 1060.25rem;
    }
 `
 
@@ -59,17 +59,17 @@ export const PesquisaContainer = styled.div`
 export const PesquisaForm = styled.form`
    display: flex;
    align-items: center;
-   border: 1px solid #ADB5BD;
-   border-radius: 5px;
-   padding: 6px 8px 6px 6px;
-   width: 666px;
-   height: 42px;
+   border: 0.063rem solid #ADB5BD;
+   border-radius: 0.25rem;
+   padding: 0.375rem 0.5rem 0.375rem 0.375rem;
+   width: 41.625rem;
+   height: 2.625rem;
 
    #biblioteca-botao-pesquisar{
       background-color: #FFC501;
-      width: 82px;
-      height: 37px;
-      font: normal normal 400 14px Roboto;
+      width: 5.125rem;
+      height: 2.313rem;
+      font: normal normal 400 0.875rem Roboto;
       color: black;
       text-transform: none;
    }
@@ -83,7 +83,7 @@ export const PesquisaForm = styled.form`
       }
    }
 
-   @media screen and (max-width: 780px) {
+   @media screen and (max-width: 48.75rem) {
       width: 80%
    }
 `

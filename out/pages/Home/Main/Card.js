@@ -15,11 +15,11 @@ const Card = ({ txt, rota, alt, imagem }) => {
                     backgroundColor: "#FFC501"
                 }
             }, children: [_jsx(CardContent, { component: 'div', sx: {
-                        height: '120px',
+                        height: '7.5rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
-                    }, children: _jsx(CardMedia, { component: 'img', sx: { width: '46px' }, image: imagem, alt: alt }) }), _jsx(CardContent, { component: 'div', id: 'div-do-paragrafo', sx: {
+                    }, children: _jsx(CardMedia, { component: 'img', sx: { width: '2.875rem' }, image: imagem, alt: alt }) }), _jsx(CardContent, { component: 'div', id: 'div-do-paragrafo', sx: {
                         backgroundColor: 'white',
                         width: 240
                     }, children: _jsx("p", { children: txt }) })] }) }));

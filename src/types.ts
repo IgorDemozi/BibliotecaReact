@@ -10,9 +10,12 @@ export type Livro = {
    rentHistory: RentHistory[];
 }
 
-export type Usuario = {
-   email: string;
-   password: string;
+export type RentHistory = {
+   studentName: string;
+   class: string;
+   title?: string;
+   withdrawalDate: string;
+   deliveryDate: string
 }
 
 export type Status = {
@@ -21,12 +24,14 @@ export type Status = {
    description: string;
 }
 
-export type RentHistory = {
-   studentName: string;
-   class: string;
-   title?: string;
-   withdrawalDate: string;
-   deliveryDate: string
+export type Usuario = {
+   email: string;
+   password: string;
+}
+
+export type Autenticacao = {
+   auth?: boolean;
+   error?: string;
 }
 
 export interface InputProps {

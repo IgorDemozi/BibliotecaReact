@@ -6,13 +6,11 @@ import { EsqueceuSenha, LoginContainer, LoginForm } from './Login.styles'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import Logo from 'assets/Logo.svg'
-import { Usuario } from 'types'
+import { Autenticacao, Usuario } from 'types'
 import { Api } from 'api'
 
 const Login = () => {
    const navigate = useNavigate();
-   const [email, setEmail] = useState('');
-   const [senha, setSenha] = useState('');
    const [shrinkEmail, setShrinkEmail] = useState(false);
    const [shrinkSenha, setShrinkSenha] = useState(false);
 
@@ -34,20 +32,39 @@ const Login = () => {
       },
       validationSchema: validationSchema,
       onSubmit: () => {
-         Api.get(`/login?q=${email}`)
-            .then(resp => {
-               var usuario: Usuario = resp.data[0];
+         // Api.get(`/login?q=${email}`)
+         //    .then(resp => {
+         //       var usuario: Usuario = resp.data[0];
 
-               if (usuario.password === senha) {
-                  localStorage.setItem('atual-usuario', usuario.email);
-                  navigate('/home');
-               } else {
-                  alert('Usuário inválido ou senha inválida');
-               }
-            })
-            .catch(error => {
-               console.log(error);
-            });
+         //       if (usuario.password === senha) {
+         //          localStorage.setItem('atual-usuario', usuario.email);
+         //          navigate('/home');
+         //       } else {
+         //          alert('Usuário inválido ou senha inválida');
+         //       }
+         //    })
+         //    .catch(error => {
+         //       console.log(error);
+         //    });
+
+         Api.post('/login', {
+            email: formik.values.email,
+            password: formik.values.password,
+            headers: {
+               'Access-Control-Allow-Origin': '*'
+            }
+         }).then(resp => {
+            let resposta: Autenticacao = resp.data[0];
+
+            if (resposta.auth) {
+               localStorage.setItem('atual-usuario', formik.values.email);
+               navigate('/home');
+            } else {
+               alert(resposta.error);
+            }
+         }).catch(error => {
+            console.log(error);
+         });
       }
    });
 
@@ -66,9 +83,9 @@ const Login = () => {
                   className: shrinkEmail ? undefined : 'login-label'
                }}
                value={formik.values.email}
-               onChange={(email) => { formik.handleChange(email); setEmail(email.target.value) }}
+               onChange={formik.handleChange}
                onFocus={() => { setShrinkEmail(true) }}
-               onBlur={() => { if (email.length === 0) setShrinkEmail(false) }}
+               onBlur={() => { if (formik.values.email.length === 0) setShrinkEmail(false) }}
                error={formik.touched.email && Boolean(formik.errors.email)}
                helperText={formik.touched.email && formik.errors.email}
                FormHelperTextProps={{
@@ -88,10 +105,10 @@ const Login = () => {
                   shrink: shrinkSenha,
                   className: shrinkSenha ? undefined : 'login-label'
                }}
-               value={senha}
-               onChange={(senha) => { formik.handleChange(senha); setSenha(senha.target.value) }}
+               value={formik.values.password}
+               onChange={formik.handleChange}
                onFocus={() => { setShrinkSenha(true) }}
-               onBlur={() => { if (senha.length === 0) setShrinkSenha(false) }}
+               onBlur={() => { if (formik.values.password.length === 0) setShrinkSenha(false) }}
                error={formik.touched.password && Boolean(formik.errors.password)}
                helperText={formik.touched.password && formik.errors.password}
                FormHelperTextProps={{

@@ -8,7 +8,7 @@ const InativadoInfo = ({ livro }: ModalProps) => {
 
          <div>
             <h2>Motivo</h2>
-            <p>{livro.status.description}</p>
+            <p>{livro!.status.description}</p>
          </div>
       </InativadoInfoSection>
    )

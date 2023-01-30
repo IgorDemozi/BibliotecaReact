@@ -1,16 +1,16 @@
-import React, { ChangeEvent, MouseEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { BibliotecaItem, BibliotecaItensContainer, LupaImg, PesquisaContainer, PesquisaForm } from './BibliotecaForm.styles'
 import { ContainerGeral, LinkParaHome, SetaEsquerda, VoltarPraHome } from '../pages.styles'
 import { Button, MenuItem, TextField } from '@mui/material';
-import Modal from '../../Componentes/Modal/Modal'
-import { Livro } from '../../types'
+import Modal from 'Componentes/Modal/Modal'
+import { Livro } from 'types'
 import { Api } from 'api';
 import { useLocation } from 'react-router-dom';
 
 const BibliotecaForm = () => {
    const options = ['Título', 'Gênero', 'Autor', 'Data de entrada'];
    const [books, setBooks] = useState<Livro[]>();
-   const [livro, setLivro] = useState<Livro>();
+   const [livroId, setLivroId] = useState<number | string>();
    const [opcao, setOpcao] = useState('');
    const [filtro, setFiltro] = useState('');
    const [pesquisa, setPesquisa] = useState('');
@@ -18,29 +18,27 @@ const BibliotecaForm = () => {
    const [modalAtivado, setModalAtivado] = useState(false);
    const { state } = useLocation();
 
-   React.useEffect(() => {
-      Api.get('books?_sort=title&_order=asc')
-         .then(resp => {
-            setBooks(resp.data);
-         })
-         .catch(error => {
-            console.log(error);
-         });
+   useEffect(() => {
+      Api.get('books').then(resp => {
+         setBooks(resp.data);
+      }).catch(error => {
+         console.log(error);
+      });
    }, [])
 
-   React.useEffect(() => {
+   useEffect(() => {
       if (state) {
-         setLivro(state);
+         setLivroId(state);
          setModalAtivado(true)
       }
    }, [state])
 
-   function abrirModal(livro: Livro) {
-      setLivro(livro);
+   function abrirModal(livroId: number | string) {
+      setLivroId(livroId);
       setModalAtivado(true);
    }
 
-   function pesquisar(event: MouseEvent) {
+   function pesquisar(event: any) {
       event.preventDefault();
       setFiltro(opcao)
       setPesquisa(texto);
@@ -48,8 +46,8 @@ const BibliotecaForm = () => {
 
    function criarElementoLivro(livro: Livro) {
       return (
-         <BibliotecaItem onClick={() => { abrirModal(livro) }} key={livro.id}>
-            <img src={livro.image} alt='' />
+         <BibliotecaItem onClick={() => { abrirModal(livro.id) }} key={livro.id}>
+            <img src={`http://localhost:3000/upload/${livro.image}`} alt={`Capa do livro ${livro.title}`} />
             <p>{livro.title}</p>
          </BibliotecaItem>
       )
@@ -66,7 +64,7 @@ const BibliotecaForm = () => {
          </VoltarPraHome>
 
          <PesquisaContainer>
-            <PesquisaForm>
+            <PesquisaForm onSubmit={pesquisar}>
                <LupaImg />
                <input
                   id='pesquisaInput'
@@ -93,7 +91,6 @@ const BibliotecaForm = () => {
                   }
                }}
             >
-               <MenuItem value={''}>---</MenuItem>
                {options.map((option) => (
                   <MenuItem key={option} value={option}>
                      {option}
@@ -103,7 +100,7 @@ const BibliotecaForm = () => {
          </PesquisaContainer>
 
          <BibliotecaItensContainer>
-            {modalAtivado && <Modal setModalAtivado={setModalAtivado} livro={livro!} />}
+            {modalAtivado && <Modal setModalAtivado={setModalAtivado} livroId={livroId} />}
             {!books ?
                <p id='bibliotecaCarregandoInfo'>Carregando informações...</p>
                :

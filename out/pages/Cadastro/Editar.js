@@ -5,7 +5,6 @@ import { MainContainer } from '../pages.styles';
 import { useLocation } from 'react-router-dom';
 const Editar = () => {
     const state = useLocation().state;
-    const livro = state.livro;
-    return (_jsxs(MainContainer, { children: [_jsx(Header, {}), _jsx(EditarForm, { livro: livro })] }));
+    return (_jsxs(MainContainer, { children: [_jsx(Header, {}), _jsx(EditarForm, { livro: state.livro })] }));
 };
 export default Editar;

@@ -1,5 +1,5 @@
 export type Livro = {
-   id: number;
+   id: number | string;
    title: string;
    author: string;
    genre: string;
@@ -52,7 +52,8 @@ export interface CardInterface {
 }
 
 export interface ModalProps {
-   livro: Livro;
+   livro?: Livro;
+   livroId?: number | string;
    setModalAtivado?: React.Dispatch<React.SetStateAction<boolean>>;
    setModalLivroAtivado?: React.Dispatch<React.SetStateAction<boolean>>;
    setEmprestarAtivado?: React.Dispatch<React.SetStateAction<boolean>>;

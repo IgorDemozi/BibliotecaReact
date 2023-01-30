@@ -10,8 +10,6 @@ import Logo from 'assets/Logo.svg';
 import { Api } from 'api';
 const Login = () => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
     const [shrinkEmail, setShrinkEmail] = useState(false);
     const [shrinkSenha, setShrinkSenha] = useState(false);
     const validationSchema = yup.object({
@@ -31,26 +29,27 @@ const Login = () => {
         },
         validationSchema: validationSchema,
         onSubmit: () => {
-            Api.get(`/login?q=${email}`)
-                .then(resp => {
-                var usuario = resp.data[0];
-                if (usuario.password === senha) {
-                    localStorage.setItem('atual-usuario', usuario.email);
+            Api.post('/login', {
+                email: formik.values.email,
+                password: formik.values.password,
+            }).then(resp => {
+                if (resp.data.auth) {
+                    localStorage.setItem('atual-usuario', formik.values.email);
                     navigate('/home');
                 }
                 else {
-                    alert('Usuário inválido ou senha inválida');
+                    alert(resp.data.error);
                 }
-            })
-                .catch(error => {
+            }).catch(error => {
                 console.log(error);
+                alert(error.response.data.error);
             });
         }
     });
     return (_jsx(LoginContainer, { children: _jsxs(LoginForm, { onSubmit: formik.handleSubmit, children: [_jsx("img", { id: 'Logotipo', src: Logo, alt: 'Logotipo da biblioteca' }), _jsx(TextField, { type: 'email', name: 'email', id: 'loginEmail', label: 'Email', InputLabelProps: {
                         shrink: shrinkEmail,
                         className: shrinkEmail ? undefined : 'login-label'
-                    }, value: formik.values.email, onChange: (email) => { formik.handleChange(email); setEmail(email.target.value); }, onFocus: () => { setShrinkEmail(true); }, onBlur: () => { if (email.length === 0)
+                    }, value: formik.values.email, onChange: formik.handleChange, onFocus: () => { setShrinkEmail(true); }, onBlur: () => { if (formik.values.email.length === 0)
                         setShrinkEmail(false); }, error: formik.touched.email && Boolean(formik.errors.email), helperText: formik.touched.email && formik.errors.email, FormHelperTextProps: {
                         style: {
                             position: 'absolute',
@@ -59,7 +58,7 @@ const Login = () => {
                     } }), _jsx(TextField, { type: 'password', name: 'password', id: 'loginSenha', label: 'Senha', InputLabelProps: {
                         shrink: shrinkSenha,
                         className: shrinkSenha ? undefined : 'login-label'
-                    }, value: senha, onChange: (senha) => { formik.handleChange(senha); setSenha(senha.target.value); }, onFocus: () => { setShrinkSenha(true); }, onBlur: () => { if (senha.length === 0)
+                    }, value: formik.values.password, onChange: formik.handleChange, onFocus: () => { setShrinkSenha(true); }, onBlur: () => { if (formik.values.password.length === 0)
                         setShrinkSenha(false); }, error: formik.touched.password && Boolean(formik.errors.password), helperText: formik.touched.password && formik.errors.password, FormHelperTextProps: {
                         style: {
                             position: 'absolute',

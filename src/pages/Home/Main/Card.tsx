@@ -1,7 +1,7 @@
 import CardMUI from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
-import { CardInterface } from '../../../types'
+import { CardInterface } from 'types'
 import { CardLink } from './Card.styles'
 
 const Card = ({ txt, rota, alt, imagem }: CardInterface) => {

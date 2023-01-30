@@ -37,7 +37,7 @@ export const BibliotecaItensContainer = styled.div `
    }
 
    @media screen and (min-width: 83.125rem) {
-      width: 1060.25rem;
+      width: 66.875rem;
    }
 `;
 export const LupaImg = styled(Lupa) `

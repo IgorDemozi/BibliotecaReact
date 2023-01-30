@@ -10,7 +10,7 @@ const Main = () => {
          <CardsDiv>
             <Card txt='Cadastrar novo Livro' rota='/cadastro' alt='cadastro' imagem={ImgCadastro} />
             <Card txt='Biblioteca' rota='/biblioteca' alt='biblioteca' imagem={ImgBiblioteca} />
-            <Card txt='Histórico de Empréstimos' rota='/emprestimos' alt='emprestimos' imagem={ImgEmprestimos}/>
+            <Card txt='Histórico de Empréstimos' rota='/emprestimos' alt='emprestimos' imagem={ImgEmprestimos} />
          </CardsDiv>
       </ContainerMain>
    )

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { EmprestarInputsContainer, MenuEmprestar } from './ModalEmprestar.styles'
 import { DivFechar } from './Modal.styles'
 import { BotaoEmprestar } from './ModalLivro.styles'
@@ -6,16 +6,16 @@ import { TextfieldCadastro } from 'pages/Cadastro/CadastroForm.styles'
 import Fechar from 'assets/Caminho_265.svg'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import { ModalProps, RentHistory, Status } from 'types'
+import { ModalProps, RentHistory } from 'types'
 import { Api } from 'api'
 import { isBefore } from 'date-fns'
 
-const ModalEmprestar = ({ livro, setEmprestarAtivado, setModalLivroAtivado }: ModalProps) => {
+const ModalEmprestar = ({ livroId, setEmprestarAtivado, setModalLivroAtivado }: ModalProps) => {
    const [shrinkAluno, setShrinkAluno] = useState(false);
    const [shrinkTurma, setShrinkTurma] = useState(false);
    const diaHoje = useRef(new Date());
 
-   React.useEffect(() => {
+   useEffect(() => {
       let hoje = new Date();
       let dataHoje: string = (hoje.getMonth() + 1) + '/' + hoje.getDate() + '/' + hoje.getFullYear();
       let dia = new Date(dataHoje);
@@ -24,7 +24,7 @@ const ModalEmprestar = ({ livro, setEmprestarAtivado, setModalLivroAtivado }: Mo
 
    function inputDateHandleChange(event: ChangeEvent<HTMLInputElement>) {
       let anoMesDia = event.target.value.split('-').map(Number);
-      let dataSelecionada = new Date(anoMesDia[0], anoMesDia[1] -1 , anoMesDia[2]);
+      let dataSelecionada = new Date(anoMesDia[0], anoMesDia[1] - 1, anoMesDia[2]);
 
       if (isBefore(dataSelecionada, diaHoje.current)) {
          alert('A data escolhida já passou');
@@ -62,22 +62,14 @@ const ModalEmprestar = ({ livro, setEmprestarAtivado, setModalLivroAtivado }: Mo
    }
 
    function salvar() {
-      let historicoDeEmprestimos: RentHistory[] = livro.rentHistory;
-
-      historicoDeEmprestimos.push({
+      let historicoDeEmprestimos: RentHistory = {
          studentName: formik.values.aluno,
          class: formik.values.turma,
          withdrawalDate: formik.values.retirada.split("-").reverse().join("/"),
          deliveryDate: formik.values.devolucao.split("-").reverse().join("/")
-      });
+      };
 
-      let novoStatus: Status = livro.status;
-      novoStatus.isRented = true;
-
-      Api.patch(`books/${livro.id}`, {
-         status: novoStatus,
-         rentHistory: historicoDeEmprestimos
-      }).then(resp => {
+      Api.patch(`/biblioteca/emprestar/${livroId}`, historicoDeEmprestimos).then(resp => {
          alert('Informações salvas com sucesso!');
       }).catch(error => {
          console.log(error);

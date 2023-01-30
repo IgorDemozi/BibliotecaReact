@@ -1,7 +1,7 @@
-import React, { ChangeEvent, useReducer, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useReducer, useRef, useState } from 'react'
 import { DivFechar, MenuHistorico } from './Modal.styles'
 import Fechar from 'assets/Caminho_265.svg'
-import { ModalProps, RentHistory } from 'types'
+import { Livro, ModalProps, RentHistory } from 'types'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -11,6 +11,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import TabelaInput from 'Componentes/TabelaInput'
+import { getBook } from 'api'
 
 const StyledTableCell = styled(TableCell)(() => ({
    [`&.${tableCellClasses.head}`]: {
@@ -44,7 +45,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
    },
 }));
 
-const ModalHistorico = ({ livro, setHistoricoAtivado, setModalLivroAtivado }: ModalProps) => {
+const ModalHistorico = ({ livroId, setHistoricoAtivado, setModalLivroAtivado }: ModalProps) => {
    const [aluno, setAluno] = useState('');
    const [turma, setTurma] = useState('');
    const [retirada, setRetirada] = useState('');
@@ -52,6 +53,13 @@ const ModalHistorico = ({ livro, setHistoricoAtivado, setModalLivroAtivado }: Mo
    const [, forceUpdate] = useReducer(x => x + 1, 0);
    const asc = useRef(true);
    const identificador = useRef(0);
+   const [livro, setLivro] = useState<Livro>();
+
+   useEffect(() => {
+      if (livroId) {
+         getBook(livroId, setLivro);
+      }
+   }, [livroId])
 
    function voltar() {
       if (setHistoricoAtivado && setModalLivroAtivado) {
@@ -64,7 +72,7 @@ const ModalHistorico = ({ livro, setHistoricoAtivado, setModalLivroAtivado }: Mo
       if (id !== identificador.current) asc.current = true;
       let field = campo as keyof RentHistory;
 
-      if (asc.current && (field === 'withdrawalDate' || field === 'deliveryDate')) {
+      if (asc.current && livro && (field === 'withdrawalDate' || field === 'deliveryDate')) {
          livro.rentHistory.sort(function (a, b) {
             let anoMesDiaA = a[field]!.split('/').reverse().map(Number);
             let anoMesDiaB = b[field]!.split('/').reverse().map(Number);
@@ -73,7 +81,7 @@ const ModalHistorico = ({ livro, setHistoricoAtivado, setModalLivroAtivado }: Mo
 
             return dataA.valueOf() - dataB.valueOf();
          })
-      } else if (field === 'withdrawalDate' || field === 'deliveryDate') {
+      } else if (livro && (field === 'withdrawalDate' || field === 'deliveryDate')) {
          livro.rentHistory.sort((b, a) => {
             let anoMesDiaA = a[field]!.split('/').reverse().map(Number);
             let anoMesDiaB = b[field]!.split('/').reverse().map(Number);
@@ -82,7 +90,7 @@ const ModalHistorico = ({ livro, setHistoricoAtivado, setModalLivroAtivado }: Mo
 
             return dataA.valueOf() - dataB.valueOf();
          })
-      } else if (asc.current) {
+      } else if (livro && asc.current) {
          livro.rentHistory.sort(function (a, b) {
             if (a[field]! < b[field]!) {
                return -1;
@@ -92,7 +100,7 @@ const ModalHistorico = ({ livro, setHistoricoAtivado, setModalLivroAtivado }: Mo
             }
             return 0;
          })
-      } else {
+      } else if (livro) {
          livro.rentHistory.sort(function (b, a) {
             if (a[field]! < b[field]!) {
                return -1;
@@ -175,7 +183,7 @@ const ModalHistorico = ({ livro, setHistoricoAtivado, setModalLivroAtivado }: Mo
                      </StyledTableCell>
                   </StyledTableRow>
 
-                  {livro.rentHistory.map((emprestimo, index) => {
+                  {livro && livro.rentHistory.map((emprestimo, index) => {
                      return (
                         <React.Fragment key={index}>
                            {emprestimo.studentName.toLowerCase().includes(aluno.toLowerCase()) &&

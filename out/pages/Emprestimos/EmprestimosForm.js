@@ -97,26 +97,10 @@ const EmprestimosForm = () => {
             });
         }
         else if (asc.current) {
-            lista.sort(function (a, b) {
-                if (a[field] < b[field]) {
-                    return -1;
-                }
-                if (a[field] > b[field]) {
-                    return 1;
-                }
-                return 0;
-            });
+            lista.sort((a, b) => a[field].localeCompare(b[field]));
         }
         else {
-            lista.sort(function (b, a) {
-                if (a[field] < b[field]) {
-                    return -1;
-                }
-                if (a[field] > b[field]) {
-                    return 1;
-                }
-                return 0;
-            });
+            lista.sort((b, a) => a[field].localeCompare(b[field]));
         }
         setListaFinal(lista);
         asc.current = !asc.current;

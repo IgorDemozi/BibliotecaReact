@@ -1,7 +1,7 @@
-import { ModalProps } from 'types';
+import { Livro } from 'types';
 import { EmprestadoInfoSection } from 'Componentes/Modal/Modal.styles';
 
-const EmprestadoInfo = ({ livro }: ModalProps) => {
+const EmprestadoInfo = ({ livro }: { livro: Livro }) => {
    const emprestimo = livro.rentHistory[Object.keys(livro.rentHistory).length - 1];
 
    return (

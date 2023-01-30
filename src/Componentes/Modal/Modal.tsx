@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, useState } from 'react';
 import { ModalProps } from 'types';
 import { ModalPrincipal } from './Modal.styles'
 import ModalEmprestar from './ModalEmprestar';
@@ -6,7 +6,7 @@ import ModalHistorico from './ModalHistorico';
 import ModalInativar from './ModalInativar';
 import ModalLivro from './ModalLivro';
 
-const Modal = ({ setModalAtivado, livro }: ModalProps) => {
+const Modal = ({ setModalAtivado, livroId }: ModalProps) => {
    const [modalLivroAtivado, setModalLivroAtivado] = useState(true);
    const [emprestarAtivado, setEmprestarAtivado] = useState(false);
    const [inativarAtivado, setInativarAtivado] = useState(false);
@@ -21,7 +21,7 @@ const Modal = ({ setModalAtivado, livro }: ModalProps) => {
    return (
       <ModalPrincipal onClick={clicarFora}>
          {modalLivroAtivado && <ModalLivro
-            livro={livro}
+            livroId={livroId}
             setModalLivroAtivado={setModalLivroAtivado}
             setModalAtivado={setModalAtivado}
             setEmprestarAtivado={setEmprestarAtivado}
@@ -30,19 +30,19 @@ const Modal = ({ setModalAtivado, livro }: ModalProps) => {
          }
 
          {emprestarAtivado && <ModalEmprestar
-            livro={livro}
+            livroId={livroId}
             setEmprestarAtivado={setEmprestarAtivado}
             setModalLivroAtivado={setModalLivroAtivado} />
          }
 
          {inativarAtivado && <ModalInativar
-            livro={livro}
+            livroId={livroId}
             setInativarAtivado={setInativarAtivado}
             setModalLivroAtivado={setModalLivroAtivado} />
          }
 
          {historicoAtivado && <ModalHistorico
-            livro={livro}
+            livroId={livroId}
             setHistoricoAtivado={setHistoricoAtivado}
             setModalLivroAtivado={setModalLivroAtivado} />
          }

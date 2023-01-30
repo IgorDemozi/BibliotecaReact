@@ -1,31 +1,21 @@
 import Fechar from 'assets/Caminho_265.svg'
 import InativadoInfo from './InativadoInfo'
 import EmprestadoInfo from './EmprestadoInfo'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BotaoDevolver, BotoesSection, CapaBotaoSection, DivFecharSimples, InfoBtSection, Informacoes, MenuLivro, SinopseFormatada, BotaoEmprestar, BotaoOpcoesModal } from './ModalLivro.styles'
-import { ModalProps } from 'types'
-import { Api } from 'api'
+import { Livro, ModalProps } from 'types'
+import { Api, getBook } from 'api'
 
-const ModalLivro = ({ livro, setModalAtivado, setEmprestarAtivado, setModalLivroAtivado, setInativarAtivado, setHistoricoAtivado }: ModalProps) => {
+const ModalLivro = ({ livroId, setModalAtivado, setEmprestarAtivado, setModalLivroAtivado, setInativarAtivado, setHistoricoAtivado }: ModalProps) => {
 
-   const [livroEmprestado, setLivroEmprestado] = useState(false);
-   const [livroAtivado, setLivroAtivado] = useState(false);
-   var novoStatus = livro.status;
+   const [livro, setLivro] = useState<Livro>();
 
-   React.useEffect(() => {
-      if (livro.status.isActive === false) {
-         setLivroAtivado(false);
-      } else {
-         setLivroAtivado(true);
+   useEffect(() => {
+      if (livroId) {
+         getBook(livroId, setLivro);
       }
-
-      if (livro.status.isRented === false) {
-         setLivroEmprestado(false);
-      } else {
-         setLivroEmprestado(true);
-      }
-   }, [livro.status.isActive, livro.status.isRented])
+   }, [livroId])
 
    function abrirEmprestar() {
       if (setModalLivroAtivado && setEmprestarAtivado) {
@@ -50,41 +40,33 @@ const ModalLivro = ({ livro, setModalAtivado, setEmprestarAtivado, setModalLivro
 
    function devolverLivro() {
       if (window.confirm('Confirmar devolução?')) {
-
-         novoStatus.isRented = false;
-
-         Api.patch(`books/${livro.id}`, {
-            status: novoStatus,
-         }).then(resp => {
+         Api.post(`/biblioteca/devolver/${livroId}`).then(resp => {
             alert('Informações salvas com sucesso!');
          }).catch(error => {
             console.log(error);
             alert('Algo deu errado...');
          });
 
-         setLivroEmprestado(false);
+         if (livroId) {
+            getBook(livroId, setLivro);
+         }
       }
    }
 
    function ativarLivro() {
       if (window.confirm('Confirmar ativação?')) {
-         novoStatus.isActive = true;
-         novoStatus.description = '';
-
-         Api.patch(`books/${livro.id}`, {
-            status: novoStatus
-         }).then(resp => {
+         Api.patch(`/biblioteca/ativar/${livroId}`).then(resp => {
             alert('Informações salvas com sucesso!');
          }).catch(error => {
             console.log(error);
             alert('Algo deu errado...');
          });
 
-         setLivroAtivado(true);
+         if (livroId) {
+            getBook(livroId, setLivro);
+         }
       }
    }
-
-
 
    return (
       <MenuLivro>
@@ -93,15 +75,17 @@ const ModalLivro = ({ livro, setModalAtivado, setEmprestarAtivado, setModalLivro
          </DivFecharSimples>
 
          <CapaBotaoSection>
-            <img src={livro.image} alt='Capa do livro' />
-            {livroEmprestado ?
+            {livro && <img src={`http://localhost:3000/upload/${livro.image}`} alt='Capa do livro' />}
+            {livro && livro.status.isRented ?
                <BotaoDevolver onClick={devolverLivro}>Devolver</BotaoDevolver>
                :
                <React.Fragment>
-                  {livroAtivado ?
+                  {livro && livro.status.isActive ?
                      <BotaoEmprestar onClick={abrirEmprestar}>Emprestar</BotaoEmprestar>
                      :
-                     <BotaoEmprestar disabled={!livroAtivado}>Emprestar</BotaoEmprestar>
+                     <React.Fragment>
+                        {livro && <BotaoEmprestar disabled={true}>Emprestar</BotaoEmprestar>}
+                     </React.Fragment>
                   }
                </React.Fragment>
             }
@@ -109,27 +93,31 @@ const ModalLivro = ({ livro, setModalAtivado, setEmprestarAtivado, setModalLivro
 
          <InfoBtSection>
             <Informacoes>
-               <h1>{livro.title}</h1>
+               {livro &&
+                  <React.Fragment>
+                     <h1>{livro.title}</h1>
 
-               <div>
-                  <h2>Sinopse</h2>
-                  <SinopseFormatada>{livro.synopsis}</SinopseFormatada>
-               </div>
+                     <div>
+                        <h2>Sinopse</h2>
+                        <SinopseFormatada>{livro.synopsis}</SinopseFormatada>
+                     </div>
 
-               <div>
-                  <h2>Autor</h2>
-                  <p>{livro.author}</p>
-               </div>
+                     <div>
+                        <h2>Autor</h2>
+                        <p>{livro.author}</p>
+                     </div>
 
-               <div>
-                  <h2>Gênero</h2>
-                  <p>{livro.genre}</p>
-               </div>
+                     <div>
+                        <h2>Gênero</h2>
+                        <p>{livro.genre}</p>
+                     </div>
 
-               <div>
-                  <h2>Data de entrada</h2>
-                  <p>{livro.systemEntryDate}</p>
-               </div>
+                     <div>
+                        <h2>Data de entrada</h2>
+                        <p>{livro.systemEntryDate}</p>
+                     </div>
+                  </React.Fragment>
+               }
             </Informacoes>
 
             <BotoesSection>
@@ -142,7 +130,7 @@ const ModalLivro = ({ livro, setModalAtivado, setEmprestarAtivado, setModalLivro
                   >Editar</BotaoOpcoesModal>
                </Link>
 
-               {livroAtivado ?
+               {livro && livro.status.isActive ?
                   <BotaoOpcoesModal
                      onClick={abrirInativar}
                      sx={{
@@ -176,8 +164,8 @@ const ModalLivro = ({ livro, setModalAtivado, setEmprestarAtivado, setModalLivro
             </BotoesSection>
          </InfoBtSection>
 
-         {livroEmprestado && <EmprestadoInfo livro={livro} />}
-         {!livroAtivado && <InativadoInfo livro={livro} />}
+         {livro && livro.status.isRented && <EmprestadoInfo livro={livro} />}
+         {livro && livro.status.isActive === false && <InativadoInfo livro={livro} />}
       </MenuLivro>
    )
 }

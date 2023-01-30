@@ -7,24 +7,22 @@ import { useNavigate } from 'react-router-dom'
 import { MenuItem } from '@mui/material'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import { Livro } from 'types'
 import { Api } from 'api'
 import { isBefore } from 'date-fns'
 
 const CadastroForm = () => {
    const navigate = useNavigate();
-   const [books, setBooks] = useState<Livro[]>();
    const [base64, setBase64] = useState<string>('');
    const [imgNoInput, setImgNoInput] = useState(false);
+   const [generos, setGeneros] = useState<string[]>();
+   const [arquivo, setArquivo] = useState<File>();
    const diaHoje = useRef(new Date());
-   let generos: string[] = [];
 
    React.useEffect(() => {
-      Api.get('/books')
+      Api.get('/books/generos')
          .then(resp => {
-            setBooks(resp.data);
-         })
-         .catch(error => {
+            setGeneros(resp.data);
+         }).catch(error => {
             console.log(error);
          });
 
@@ -36,7 +34,7 @@ const CadastroForm = () => {
 
    function inputDateHandleChange(event: ChangeEvent<HTMLInputElement>) {
       let anoMesDia = event.target.value.split('-').map(Number);
-      let dataSelecionada = new Date(anoMesDia[0], anoMesDia[1] -1 , anoMesDia[2]);
+      let dataSelecionada = new Date(anoMesDia[0], anoMesDia[1] - 1, anoMesDia[2]);
 
       if (isBefore(dataSelecionada, diaHoje.current)) {
          alert('A data escolhida já passou');
@@ -65,17 +63,18 @@ const CadastroForm = () => {
       onSubmit: () => {
          salvar();
          formik.resetForm();
+         setBase64('');
       }
    });
 
    function pegarBase64(event: any) {
-
       return new Promise(() => {
-         var leitor = new FileReader();
-         leitor.readAsDataURL(event.target.files[0]);
+         let leitor = new FileReader();
 
-         leitor.onloadend = () => {
-            if (leitor.result) {
+         if (event.target.files) {
+            setArquivo(event.target.files[0]);
+            leitor.readAsDataURL(event.target.files[0]);
+            leitor.onloadend = () => {
                setBase64(leitor.result as string);
                setImgNoInput(true);
             }
@@ -90,47 +89,32 @@ const CadastroForm = () => {
    }
 
    function salvar() {
-      if (books) {
-         var dataFormatada = formik.values.data.split("-").reverse().join("/");
-
-         Api.post('books', {
-            id: books.length,
-            title: formik.values.titulo,
-            author: formik.values.autor,
-            genre: formik.values.genero,
-            status: { isRented: false, isActive: true, description: '' },
-            image: base64,
-            systemEntryDate: dataFormatada,
-            synopsis: formik.values.sinopse,
-            rentHistory: []
-         }).then(resp => {
-            alert('Informações salvas com sucesso!');
-         }).catch(error => {
-            console.log(error);
-            alert('Algo deu errado...');
-         });
+      let dataFormatada = formik.values.data.split("-").reverse().join("/");
+      const formData = new FormData();
+      let novoLivro = {
+         title: formik.values.titulo,
+         author: formik.values.autor,
+         genre: formik.values.genero,
+         status: { isRented: false, isActive: true, description: '' },
+         image: base64,
+         systemEntryDate: dataFormatada,
+         synopsis: formik.values.sinopse,
+         rentHistory: []
       }
-   }
+      if (arquivo) {
+         formData.append('image', arquivo);
+         formData.append('novoLivro', JSON.stringify(novoLivro));
+      }
 
-   if (books) {
-      books.forEach(item => {
-         if (generos.includes(item.genre)) {
-            return null
-         } else {
-            generos.push(item.genre);
-         }
+      Api.post('books', formData, {
+         headers: { 'Content-Type': 'multipart/form-data' }
+      }).then(resp => {
+         alert('Informações salvas com sucesso!');
+      }).catch(error => {
+         console.log(error);
+         alert('Algo deu errado...');
       });
    }
-
-   generos.sort(function (a, b) {
-      if (a < b) {
-         return -1;
-      }
-      if (a > b) {
-         return 1;
-      }
-      return 0;
-   });
 
    return (
       <ContainerGeral>
@@ -248,7 +232,7 @@ const CadastroForm = () => {
                      }}
                   >
                      <MenuItem value={''}>---</MenuItem>
-                     {generos.map((option) => (
+                     {generos && generos.map((option) => (
                         <MenuItem key={option} value={option}>
                            {option}
                         </MenuItem>

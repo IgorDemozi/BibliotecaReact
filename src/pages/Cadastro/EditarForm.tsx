@@ -1,37 +1,30 @@
 import IconeAdicionar from 'assets/Caminho 261.svg';
 import ButtonMUI from '@mui/material/Button'
-import React, { ChangeEvent, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { CadastroContainer, InserirCapa, TextfieldCadastro } from './CadastroForm.styles'
 import { ContainerGeral, VoltarPraHome, LinkParaHome, SetaEsquerda } from 'pages/pages.styles'
 import { useNavigate } from 'react-router-dom'
 import { MenuItem } from '@mui/material';
 import { useFormik } from 'formik'
-import * as yup from 'yup'
-import { Livro, ModalProps } from 'types';
+import { Livro } from 'types';
 import { Api } from 'api';
 import { isBefore } from 'date-fns';
+import * as yup from 'yup'
 
-const EditarForm = ({ livro }: ModalProps) => {
-   const [books, setBooks] = useState<Livro[]>();
-   const [base64, setBase64] = useState(livro.image);
-   const [data, setData] = useState(livro.systemEntryDate);
-   const [imgNoInput, setImgNoInput] = useState(true);
-   const diaHoje = useRef(new Date());
+const EditarForm = ({ livro }: { livro: Livro }) => {
    const navigate = useNavigate();
-   var generos: string[] = [];
+   const diaHoje = useRef(new Date());
+   const [base64, setBase64] = useState(`http://localhost:3000/upload/${livro.image}`);
+   const [arquivo, setArquivo] = useState<File>();
+   const [imgNoInput, setImgNoInput] = useState(true);
+   const [generos, setGeneros] = useState<string[]>();
 
-   React.useEffect(() => {
-      setData(data.split("/").reverse().join("-"));
-   }, [data]);
-
-   React.useEffect(() => {
-      Api.get('/books')
-         .then(resp => {
-            setBooks(resp.data);
-         })
-         .catch(error => {
-            console.log(error);
-         });
+   useEffect(() => {
+      Api.get('/books/generos').then(resp => {
+         setGeneros(resp.data);
+      }).catch(error => {
+         console.log(error);
+      });
 
       let hoje = new Date();
       let dataHoje: string = (hoje.getMonth() + 1) + '/' + hoje.getDate() + '/' + hoje.getFullYear();
@@ -41,7 +34,7 @@ const EditarForm = ({ livro }: ModalProps) => {
 
    function inputDateHandleChange(event: ChangeEvent<HTMLInputElement>) {
       let anoMesDia = event.target.value.split('-').map(Number);
-      let dataSelecionada = new Date(anoMesDia[0], anoMesDia[1] -1 , anoMesDia[2]);
+      let dataSelecionada = new Date(anoMesDia[0], anoMesDia[1] - 1, anoMesDia[2]);
 
       if (isBefore(dataSelecionada, diaHoje.current)) {
          alert('A data escolhida já passou');
@@ -64,20 +57,21 @@ const EditarForm = ({ livro }: ModalProps) => {
          sinopse: livro.synopsis,
          autor: livro.author,
          genero: livro.genre,
-         data: livro.systemEntryDate
+         data: livro.systemEntryDate.split("/").reverse().join("-")
       },
       validationSchema: validationSchema,
       onSubmit: () => {
          salvar();
-         navigate('/biblioteca', {state: livro});
+         navigate('/biblioteca', { state: livro.id });
       }
    });
 
    function pegarBase64(event: ChangeEvent<HTMLInputElement>) {
       return new Promise(() => {
-         var leitor = new FileReader();
+         let leitor = new FileReader();
 
-         if(event.target.files){
+         if (event.target.files) {
+            setArquivo(event.target.files[0]);
             leitor.readAsDataURL(event.target.files[0]);
             leitor.onloadend = () => {
                setBase64(leitor.result as string);
@@ -89,59 +83,48 @@ const EditarForm = ({ livro }: ModalProps) => {
 
    function retornarParaBiblioteca() {
       if (window.confirm('Tem certeza de que quer cancelar? Você retornará à biblioteca.')) {
-         navigate('/biblioteca', {state: livro});
+         navigate('/biblioteca', { state: livro.id });
       }
    }
 
    function salvar() {
-      let dataFormatada = data.split("-").reverse().join("/");
-
-      Api.patch(`books/${livro.id}`, {
-         title: formik.values.titulo,
-         author: formik.values.autor,
-         genre: formik.values.genero,
-         image: base64,
-         systemEntryDate: dataFormatada,
-         synopsis: formik.values.sinopse
-      }).then(resp => {
-         alert('Informações salvas com sucesso!');
-      }).catch(error => {
-         console.log(error);
-         alert('Algo deu errado...');
-      });
-   }
-
-   if (books) {
-      books.forEach(item => {
-         if (generos.includes(item.genre)) {
-            return null
-         } else {
-            generos.push(item.genre);
+      if (livro) {
+         let dataFormatada = formik.values.data.split("-").reverse().join("/");
+         const formData = new FormData();
+         let newInfo = {
+            title: formik.values.titulo,
+            author: formik.values.autor,
+            genre: formik.values.genero,
+            image: base64,
+            systemEntryDate: dataFormatada,
+            synopsis: formik.values.sinopse
          }
-      });
+         if (arquivo) {
+            formData.append('image', arquivo);
+            formData.append('newInfo', JSON.stringify(newInfo));
+         }
+         Api.patch(`books/${livro.id}`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+         }).then(resp => {
+            alert('Informações salvas com sucesso!');
+         }).catch(error => {
+            console.log(error);
+            alert('Algo deu errado...');
+         });
+      }
    }
-
-   generos.sort(function (a, b) {
-      if (a < b) {
-         return -1;
-      }
-      if (a > b) {
-         return 1;
-      }
-      return 0;
-   });
 
    return (
       <ContainerGeral>
          <VoltarPraHome>
             <p>
-               <LinkParaHome to='/biblioteca' state={livro}>
+               <LinkParaHome to='/biblioteca' state={livro.id}>
                   <SetaEsquerda /> Biblioteca
                </LinkParaHome> / <b>Editar livro</b>
             </p>
          </VoltarPraHome>
 
-         <CadastroContainer onSubmit={formik.handleSubmit}>
+         <CadastroContainer onSubmit={formik.handleSubmit} encType="multipart/form-data">
             <InserirCapa>
                {imgNoInput ?
                   <React.Fragment>
@@ -249,7 +232,7 @@ const EditarForm = ({ livro }: ModalProps) => {
                      }}
                   >
                      <MenuItem value={''}>---</MenuItem>
-                     {generos.map((option) => (
+                     {generos && generos.map((option) => (
                         <MenuItem key={option} value={option}>
                            {option}
                         </MenuItem>

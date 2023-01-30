@@ -6,7 +6,6 @@ import { EsqueceuSenha, LoginContainer, LoginForm } from './Login.styles'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import Logo from 'assets/Logo.svg'
-import { Autenticacao, Usuario } from 'types'
 import { Api } from 'api'
 
 const Login = () => {
@@ -32,38 +31,19 @@ const Login = () => {
       },
       validationSchema: validationSchema,
       onSubmit: () => {
-         // Api.get(`/login?q=${email}`)
-         //    .then(resp => {
-         //       var usuario: Usuario = resp.data[0];
-
-         //       if (usuario.password === senha) {
-         //          localStorage.setItem('atual-usuario', usuario.email);
-         //          navigate('/home');
-         //       } else {
-         //          alert('Usuário inválido ou senha inválida');
-         //       }
-         //    })
-         //    .catch(error => {
-         //       console.log(error);
-         //    });
-
          Api.post('/login', {
             email: formik.values.email,
             password: formik.values.password,
-            headers: {
-               'Access-Control-Allow-Origin': '*'
-            }
          }).then(resp => {
-            let resposta: Autenticacao = resp.data[0];
-
-            if (resposta.auth) {
+            if (resp.data.auth) {
                localStorage.setItem('atual-usuario', formik.values.email);
                navigate('/home');
             } else {
-               alert(resposta.error);
+               alert(resp.data.error);
             }
          }).catch(error => {
             console.log(error);
+            alert(error.response.data.error);
          });
       }
    });

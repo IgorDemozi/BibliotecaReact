@@ -1,32 +1,26 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import IconeAdicionar from 'assets/Caminho 261.svg';
 import ButtonMUI from '@mui/material/Button';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CadastroContainer, InserirCapa, TextfieldCadastro } from './CadastroForm.styles';
 import { ContainerGeral, VoltarPraHome, LinkParaHome, SetaEsquerda } from 'pages/pages.styles';
 import { useNavigate } from 'react-router-dom';
 import { MenuItem } from '@mui/material';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
 import { Api } from 'api';
 import { isBefore } from 'date-fns';
+import * as yup from 'yup';
 const EditarForm = ({ livro }) => {
-    const [books, setBooks] = useState();
-    const [base64, setBase64] = useState(livro.image);
-    const [data, setData] = useState(livro.systemEntryDate);
-    const [imgNoInput, setImgNoInput] = useState(true);
-    const diaHoje = useRef(new Date());
     const navigate = useNavigate();
-    var generos = [];
-    React.useEffect(() => {
-        setData(data.split("/").reverse().join("-"));
-    }, [data]);
-    React.useEffect(() => {
-        Api.get('/books')
-            .then(resp => {
-            setBooks(resp.data);
-        })
-            .catch(error => {
+    const diaHoje = useRef(new Date());
+    const [base64, setBase64] = useState(`http://localhost:3000/upload/${livro.image}`);
+    const [arquivo, setArquivo] = useState();
+    const [imgNoInput, setImgNoInput] = useState(true);
+    const [generos, setGeneros] = useState();
+    useEffect(() => {
+        Api.get('/books/generos').then(resp => {
+            setGeneros(resp.data);
+        }).catch(error => {
             console.log(error);
         });
         let hoje = new Date();
@@ -57,18 +51,19 @@ const EditarForm = ({ livro }) => {
             sinopse: livro.synopsis,
             autor: livro.author,
             genero: livro.genre,
-            data: livro.systemEntryDate
+            data: livro.systemEntryDate.split("/").reverse().join("-")
         },
         validationSchema: validationSchema,
         onSubmit: () => {
             salvar();
-            navigate('/biblioteca', { state: livro });
+            navigate('/biblioteca', { state: livro.id });
         }
     });
     function pegarBase64(event) {
         return new Promise(() => {
-            var leitor = new FileReader();
+            let leitor = new FileReader();
             if (event.target.files) {
+                setArquivo(event.target.files[0]);
                 leitor.readAsDataURL(event.target.files[0]);
                 leitor.onloadend = () => {
                     setBase64(leitor.result);
@@ -79,45 +74,36 @@ const EditarForm = ({ livro }) => {
     }
     function retornarParaBiblioteca() {
         if (window.confirm('Tem certeza de que quer cancelar? Você retornará à biblioteca.')) {
-            navigate('/biblioteca', { state: livro });
+            navigate('/biblioteca', { state: livro.id });
         }
     }
     function salvar() {
-        let dataFormatada = data.split("-").reverse().join("/");
-        Api.patch(`books/${livro.id}`, {
-            title: formik.values.titulo,
-            author: formik.values.autor,
-            genre: formik.values.genero,
-            image: base64,
-            systemEntryDate: dataFormatada,
-            synopsis: formik.values.sinopse
-        }).then(resp => {
-            alert('Informações salvas com sucesso!');
-        }).catch(error => {
-            console.log(error);
-            alert('Algo deu errado...');
-        });
-    }
-    if (books) {
-        books.forEach(item => {
-            if (generos.includes(item.genre)) {
-                return null;
+        if (livro) {
+            let dataFormatada = formik.values.data.split("-").reverse().join("/");
+            const formData = new FormData();
+            let newInfo = {
+                title: formik.values.titulo,
+                author: formik.values.autor,
+                genre: formik.values.genero,
+                image: base64,
+                systemEntryDate: dataFormatada,
+                synopsis: formik.values.sinopse
+            };
+            if (arquivo) {
+                formData.append('image', arquivo);
+                formData.append('newInfo', JSON.stringify(newInfo));
             }
-            else {
-                generos.push(item.genre);
-            }
-        });
+            Api.patch(`books/${livro.id}`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            }).then(resp => {
+                alert('Informações salvas com sucesso!');
+            }).catch(error => {
+                console.log(error);
+                alert('Algo deu errado...');
+            });
+        }
     }
-    generos.sort(function (a, b) {
-        if (a < b) {
-            return -1;
-        }
-        if (a > b) {
-            return 1;
-        }
-        return 0;
-    });
-    return (_jsxs(ContainerGeral, { children: [_jsx(VoltarPraHome, { children: _jsxs("p", { children: [_jsxs(LinkParaHome, { to: '/biblioteca', state: livro, children: [_jsx(SetaEsquerda, {}), " Biblioteca"] }), " / ", _jsx("b", { children: "Editar livro" })] }) }), _jsxs(CadastroContainer, { onSubmit: formik.handleSubmit, children: [_jsx(InserirCapa, { children: imgNoInput ?
+    return (_jsxs(ContainerGeral, { children: [_jsx(VoltarPraHome, { children: _jsxs("p", { children: [_jsxs(LinkParaHome, { to: '/biblioteca', state: livro.id, children: [_jsx(SetaEsquerda, {}), " Biblioteca"] }), " / ", _jsx("b", { children: "Editar livro" })] }) }), _jsxs(CadastroContainer, { onSubmit: formik.handleSubmit, encType: "multipart/form-data", children: [_jsx(InserirCapa, { children: imgNoInput ?
                             _jsxs(React.Fragment, { children: [_jsx("img", { id: 'capaDoLivro', src: base64, alt: 'capa do livro' }), _jsx("input", { type: 'file', onChange: (event) => pegarBase64(event) })] })
                             :
                                 _jsxs(React.Fragment, { children: [_jsx("input", { required: true, type: 'file', onChange: pegarBase64 }), _jsx("img", { src: IconeAdicionar, alt: 'adicionar capa' }), _jsx("p", { children: "Capa" })] }) }), _jsxs("section", { children: [_jsxs("div", { id: 'container1', children: [_jsx(TextfieldCadastro, { type: 'text', name: 'titulo', label: 'T\u00EDtulo', value: formik.values.titulo, onChange: formik.handleChange, inputProps: {
@@ -156,7 +142,7 @@ const EditarForm = ({ livro }) => {
                                                 position: 'absolute',
                                                 transform: 'translate(-0.75rem, 3.1rem)'
                                             }
-                                        }, children: [_jsx(MenuItem, { value: '', children: "---" }), generos.map((option) => (_jsx(MenuItem, { value: option, children: option }, option)))] }), _jsx(TextfieldCadastro, { type: 'date', name: 'data', label: 'Data', inputProps: {
+                                        }, children: [_jsx(MenuItem, { value: '', children: "---" }), generos && generos.map((option) => (_jsx(MenuItem, { value: option, children: option }, option)))] }), _jsx(TextfieldCadastro, { type: 'date', name: 'data', label: 'Data', inputProps: {
                                             style: {
                                                 height: "1.25rem"
                                             }

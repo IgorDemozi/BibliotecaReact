@@ -7,9 +7,7 @@ import * as yup from 'yup'
 import { ModalProps } from 'types'
 import { Api } from 'api'
 
-const ModalInativar = ({ livro, setInativarAtivado, setModalLivroAtivado }: ModalProps) => {
-   let novoStatus = livro.status;
-
+const ModalInativar = ({ livroId, setInativarAtivado, setModalLivroAtivado }: ModalProps) => {
    function voltar() {
       if (setInativarAtivado && setModalLivroAtivado) {
          setInativarAtivado(false);
@@ -18,11 +16,10 @@ const ModalInativar = ({ livro, setInativarAtivado, setModalLivroAtivado }: Moda
    }
 
    function salvar() {
-      novoStatus.isActive = false;
-      novoStatus.description = formik.values.motivo;
+      let description = formik.values.motivo;
 
-      Api.patch(`books/${livro.id}`, {
-         status: novoStatus
+      Api.patch(`/biblioteca/desativar/${livroId}`, {
+         description: description
       }).then(resp => {
          alert('Informações salvas com sucesso!');
       }).catch(error => {

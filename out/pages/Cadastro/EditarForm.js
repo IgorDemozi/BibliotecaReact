@@ -56,7 +56,7 @@ const EditarForm = ({ livro }) => {
         validationSchema: validationSchema,
         onSubmit: () => {
             salvar();
-            navigate('/biblioteca', { state: livro.id });
+            navigate('/home/biblioteca', { state: livro.id });
         }
     });
     function pegarBase64(event) {
@@ -74,7 +74,7 @@ const EditarForm = ({ livro }) => {
     }
     function retornarParaBiblioteca() {
         if (window.confirm('Tem certeza de que quer cancelar? Você retornará à biblioteca.')) {
-            navigate('/biblioteca', { state: livro.id });
+            navigate('/home/biblioteca', { state: livro.id });
         }
     }
     function salvar() {
@@ -103,7 +103,7 @@ const EditarForm = ({ livro }) => {
             });
         }
     }
-    return (_jsxs(ContainerGeral, { children: [_jsx(VoltarPraHome, { children: _jsxs("p", { children: [_jsxs(LinkParaHome, { to: '/biblioteca', state: livro.id, children: [_jsx(SetaEsquerda, {}), " Biblioteca"] }), " / ", _jsx("b", { children: "Editar livro" })] }) }), _jsxs(CadastroContainer, { onSubmit: formik.handleSubmit, encType: "multipart/form-data", children: [_jsx(InserirCapa, { children: imgNoInput ?
+    return (_jsxs(ContainerGeral, { children: [_jsx(VoltarPraHome, { children: _jsxs("p", { children: [_jsxs(LinkParaHome, { to: '/home/biblioteca', state: livro.id, children: [_jsx(SetaEsquerda, {}), " Biblioteca"] }), " / ", _jsx("b", { children: "Editar livro" })] }) }), _jsxs(CadastroContainer, { onSubmit: formik.handleSubmit, encType: "multipart/form-data", children: [_jsx(InserirCapa, { children: imgNoInput ?
                             _jsxs(React.Fragment, { children: [_jsx("img", { id: 'capaDoLivro', src: base64, alt: 'capa do livro' }), _jsx("input", { type: 'file', onChange: (event) => pegarBase64(event) })] })
                             :
                                 _jsxs(React.Fragment, { children: [_jsx("input", { required: true, type: 'file', onChange: pegarBase64 }), _jsx("img", { src: IconeAdicionar, alt: 'adicionar capa' }), _jsx("p", { children: "Capa" })] }) }), _jsxs("section", { children: [_jsxs("div", { id: 'container1', children: [_jsx(TextfieldCadastro, { type: 'text', name: 'titulo', label: 'T\u00EDtulo', value: formik.values.titulo, onChange: formik.handleChange, inputProps: {

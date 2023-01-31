@@ -8,9 +8,13 @@ const Main = () => {
    return (
       <ContainerMain>
          <CardsDiv>
-            <Card txt='Cadastrar novo Livro' rota='/cadastro' alt='cadastro' imagem={ImgCadastro} />
+            {/* <Card txt='Cadastrar novo Livro' rota='/cadastro' alt='cadastro' imagem={ImgCadastro} />
             <Card txt='Biblioteca' rota='/biblioteca' alt='biblioteca' imagem={ImgBiblioteca} />
-            <Card txt='Histórico de Empréstimos' rota='/emprestimos' alt='emprestimos' imagem={ImgEmprestimos} />
+            <Card txt='Histórico de Empréstimos' rota='/emprestimos' alt='emprestimos' imagem={ImgEmprestimos} /> */}
+
+            <Card txt='Cadastrar novo Livro' rota='/home/cadastro' alt='cadastro' imagem={ImgCadastro} />
+            <Card txt='Biblioteca' rota='/home/biblioteca' alt='biblioteca' imagem={ImgBiblioteca} />
+            <Card txt='Histórico de Empréstimos' rota='/home/emprestimos' alt='emprestimos' imagem={ImgEmprestimos} />
          </CardsDiv>
       </ContainerMain>
    )

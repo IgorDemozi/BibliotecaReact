@@ -62,7 +62,7 @@ const EditarForm = ({ livro }: { livro: Livro }) => {
       validationSchema: validationSchema,
       onSubmit: () => {
          salvar();
-         navigate('/biblioteca', { state: livro.id });
+         navigate('/home/biblioteca', { state: livro.id });
       }
    });
 
@@ -83,7 +83,7 @@ const EditarForm = ({ livro }: { livro: Livro }) => {
 
    function retornarParaBiblioteca() {
       if (window.confirm('Tem certeza de que quer cancelar? Você retornará à biblioteca.')) {
-         navigate('/biblioteca', { state: livro.id });
+         navigate('/home/biblioteca', { state: livro.id });
       }
    }
 
@@ -118,7 +118,7 @@ const EditarForm = ({ livro }: { livro: Livro }) => {
       <ContainerGeral>
          <VoltarPraHome>
             <p>
-               <LinkParaHome to='/biblioteca' state={livro.id}>
+               <LinkParaHome to='/home/biblioteca' state={livro.id}>
                   <SetaEsquerda /> Biblioteca
                </LinkParaHome> / <b>Editar livro</b>
             </p>

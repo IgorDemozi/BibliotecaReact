@@ -40,7 +40,7 @@ const ModalLivro = ({ livroId, setModalAtivado, setEmprestarAtivado, setModalLiv
 
    function devolverLivro() {
       if (window.confirm('Confirmar devolução?')) {
-         Api.post(`/biblioteca/devolver/${livroId}`).then(resp => {
+         Api.patch(`/biblioteca/devolver/${livroId}`).then(resp => {
             alert('Informações salvas com sucesso!');
          }).catch(error => {
             console.log(error);
@@ -121,7 +121,7 @@ const ModalLivro = ({ livroId, setModalAtivado, setEmprestarAtivado, setModalLiv
             </Informacoes>
 
             <BotoesSection>
-               <Link to='/editar' state={{ livro: livro }} style={{ textDecoration: 'none' }}>
+               <Link to='/home/biblioteca/editar' state={{ livro: livro }} style={{ textDecoration: 'none' }}>
                   <BotaoOpcoesModal
                      sx={{
                         border: '0.063rem solid #167CE2',

@@ -12,11 +12,16 @@ function App() {
       <BrowserRouter>
          <Routes>
             <Route path='/' element={<Login />} />
-            <Route path='/home' element={<Home />} />
-            <Route path='/cadastro' element={<Cadastro />} />
-            <Route path='/biblioteca' element={<Biblioteca />} />
-            <Route path='/editar' element={<Editar />} />
-            <Route path='/emprestimos' element={<Emprestimos />} />
+
+            <Route path='/home'>
+               <Route index={true} element={<Home />} />
+               <Route path='/home/cadastro' element={<Cadastro />} />
+               <Route path='/home/biblioteca' element={<Biblioteca />} />
+               <Route path='/home/biblioteca/editar'>
+                  <Route index={true} element={<Editar />} />
+               </Route>
+               <Route path='/home/emprestimos' element={<Emprestimos />} />
+            </Route>
          </Routes>
       </BrowserRouter>
    );

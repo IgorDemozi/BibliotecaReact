@@ -7,7 +7,6 @@ const BotaoOrdenar = styled.img`
    position: absolute;
    z-index: 100;
    cursor: pointer;
-   
 `
 
 const DivInputTabela = styled.div`

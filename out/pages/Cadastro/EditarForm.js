@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import IconeAdicionar from 'assets/Caminho 261.svg';
 import ButtonMUI from '@mui/material/Button';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { CadastroContainer, InserirCapa, TextfieldCadastro } from './CadastroForm.styles';
 import { ContainerGeral, VoltarPraHome, LinkParaHome, SetaEsquerda } from 'pages/pages.styles';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ const EditarForm = ({ livro }) => {
     const [arquivo, setArquivo] = useState();
     const [imgNoInput, setImgNoInput] = useState(true);
     const [generos, setGeneros] = useState();
-    useEffect(() => {
+    React.useEffect(() => {
         Api.get('/books/generos').then(resp => {
             setGeneros(resp.data);
         }).catch(error => {
@@ -80,31 +80,31 @@ const EditarForm = ({ livro }) => {
     function salvar() {
         if (livro) {
             let dataFormatada = formik.values.data.split("-").reverse().join("/");
-            const formData = new FormData();
             let newInfo = {
                 title: formik.values.titulo,
                 author: formik.values.autor,
                 genre: formik.values.genero,
-                image: base64,
+                image: livro.image,
                 systemEntryDate: dataFormatada,
                 synopsis: formik.values.sinopse
             };
+            const formData = new FormData();
             if (arquivo) {
                 formData.append('image', arquivo);
-                formData.append('newInfo', JSON.stringify(newInfo));
             }
+            formData.append('newInfo', JSON.stringify(newInfo));
             Api.patch(`books/${livro.id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then(resp => {
                 alert('Informações salvas com sucesso!');
             }).catch(error => {
                 console.log(error);
-                alert('Algo deu errado...');
+                alert(error.response.data.error);
             });
         }
     }
     return (_jsxs(ContainerGeral, { children: [_jsx(VoltarPraHome, { children: _jsxs("p", { children: [_jsxs(LinkParaHome, { to: '/home/biblioteca', state: livro.id, children: [_jsx(SetaEsquerda, {}), " Biblioteca"] }), " / ", _jsx("b", { children: "Editar livro" })] }) }), _jsxs(CadastroContainer, { onSubmit: formik.handleSubmit, encType: "multipart/form-data", children: [_jsx(InserirCapa, { children: imgNoInput ?
-                            _jsxs(React.Fragment, { children: [_jsx("img", { id: 'capaDoLivro', src: base64, alt: 'capa do livro' }), _jsx("input", { type: 'file', onChange: (event) => pegarBase64(event) })] })
+                            _jsxs(React.Fragment, { children: [_jsx("img", { id: 'capaDoLivro', src: base64, alt: 'capa do livro' }), _jsx("input", { type: 'file', onChange: pegarBase64 })] })
                             :
                                 _jsxs(React.Fragment, { children: [_jsx("input", { required: true, type: 'file', onChange: pegarBase64 }), _jsx("img", { src: IconeAdicionar, alt: 'adicionar capa' }), _jsx("p", { children: "Capa" })] }) }), _jsxs("section", { children: [_jsxs("div", { id: 'container1', children: [_jsx(TextfieldCadastro, { type: 'text', name: 'titulo', label: 'T\u00EDtulo', value: formik.values.titulo, onChange: formik.handleChange, inputProps: {
                                             style: {

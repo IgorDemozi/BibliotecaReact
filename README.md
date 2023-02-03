@@ -4,20 +4,13 @@ Library é um projeto criado para fins de estudo e familiarização com algumas 
 
 ## Tecnoligias usadas no projeto:
 
-- TypeScript
-- [Json-Server](https://www.npmjs.com/package/json-server) - usado para simular um servidor usando dados de um arquivo JSON, possibilitando fazer requisições
-- [Material-UI](https://mui.com/) - biblioteca usada para facilitar a criação de elementos na tela
-- [Axios](https://axios-http.com/ptbr/docs/intro) - biblioteca usada para fazer requisições para o JSON Server
-- [Formik](https://formik.org/) e [Yup](https://www.npmjs.com/package/yup) - usados para criação e validação de formulários
-- [Styled-Components](https://styled-components.com/) - biblioteca usada para estilização de componentes
+- TypeScript - usado para fazer a tipagem do código escrito em JavaScript, o que dá diversas vantagens ao escrever o código.
+- [Material-UI](https://mui.com/) - biblioteca usada para facilitar a criação de elementos na tela.
+- [Axios](https://axios-http.com/ptbr/docs/intro) - biblioteca usada para fazer requisições para o JSON Server.
+- [Formik](https://formik.org/) e [Yup](https://www.npmjs.com/package/yup) - usados para criação e validação de formulários.
+- [Styled-Components](https://styled-components.com/) - biblioteca usada para estilização de componentes.
 
 ## Como usar
-
-Inicie o servidor
-
-```sh
-npm run server
-```
 
 Após o servidor estar inicializado, execute a aplicação
 

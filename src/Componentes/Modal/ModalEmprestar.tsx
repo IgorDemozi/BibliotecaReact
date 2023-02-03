@@ -73,7 +73,7 @@ const ModalEmprestar = ({ livroId, setEmprestarAtivado, setModalLivroAtivado }: 
          alert('Informações salvas com sucesso!');
       }).catch(error => {
          console.log(error);
-         alert('Algo deu errado...');
+         alert(error.response.data.error);
       });
    }
 

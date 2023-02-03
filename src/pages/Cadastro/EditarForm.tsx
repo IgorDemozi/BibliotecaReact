@@ -1,6 +1,6 @@
 import IconeAdicionar from 'assets/Caminho 261.svg';
 import ButtonMUI from '@mui/material/Button'
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, useRef, useState } from 'react'
 import { CadastroContainer, InserirCapa, TextfieldCadastro } from './CadastroForm.styles'
 import { ContainerGeral, VoltarPraHome, LinkParaHome, SetaEsquerda } from 'pages/pages.styles'
 import { useNavigate } from 'react-router-dom'
@@ -19,7 +19,7 @@ const EditarForm = ({ livro }: { livro: Livro }) => {
    const [imgNoInput, setImgNoInput] = useState(true);
    const [generos, setGeneros] = useState<string[]>();
 
-   useEffect(() => {
+   React.useEffect(() => {
       Api.get('/books/generos').then(resp => {
          setGeneros(resp.data);
       }).catch(error => {
@@ -90,26 +90,28 @@ const EditarForm = ({ livro }: { livro: Livro }) => {
    function salvar() {
       if (livro) {
          let dataFormatada = formik.values.data.split("-").reverse().join("/");
-         const formData = new FormData();
          let newInfo = {
             title: formik.values.titulo,
             author: formik.values.autor,
             genre: formik.values.genero,
-            image: base64,
+            image: livro.image,
             systemEntryDate: dataFormatada,
             synopsis: formik.values.sinopse
          }
+
+         const formData = new FormData();
          if (arquivo) {
             formData.append('image', arquivo);
-            formData.append('newInfo', JSON.stringify(newInfo));
          }
+         formData.append('newInfo', JSON.stringify(newInfo));
+         
          Api.patch(`books/${livro.id}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
          }).then(resp => {
             alert('Informações salvas com sucesso!');
          }).catch(error => {
             console.log(error);
-            alert('Algo deu errado...');
+            alert(error.response.data.error);
          });
       }
    }
@@ -129,9 +131,7 @@ const EditarForm = ({ livro }: { livro: Livro }) => {
                {imgNoInput ?
                   <React.Fragment>
                      <img id='capaDoLivro' src={base64} alt='capa do livro' />
-                     <input type='file'
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => pegarBase64(event)}
-                     />
+                     <input type='file' onChange={pegarBase64} />
                   </React.Fragment>
                   :
                   <React.Fragment>

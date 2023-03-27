@@ -1,11 +1,14 @@
-import { ChangeEvent, useEffect, useState } from 'react'
-import { BibliotecaItem, BibliotecaItensContainer, LupaImg, PesquisaContainer, PesquisaForm } from './BibliotecaForm.styles'
-import { ContainerGeral, LinkParaHome, SetaEsquerda, VoltarPraHome } from '../pages.styles'
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Button, MenuItem, TextField } from '@mui/material';
-import Modal from 'Componentes/Modal/Modal'
-import { Livro } from 'types'
-import { Api } from 'api';
 import { useLocation } from 'react-router-dom';
+
+import Lupa from '../../assets/Caminho_263.svg';
+import Modal from '../../Componentes/Modal/Modal';
+import VoltarParaHome from '../../Componentes/VoltarParaHome';
+import { Livro } from 'types';
+import { Api } from '../../api';
+import { ContainerGeral } from '../pages.styles';
+import { BibliotecaItem, BibliotecaItensContainer, PesquisaContainer, PesquisaForm } from './BibliotecaForm.styles';
 
 const BibliotecaForm = () => {
    const options = ['Título', 'Gênero', 'Autor', 'Data de entrada'];
@@ -19,19 +22,21 @@ const BibliotecaForm = () => {
    const { state } = useLocation();
 
    useEffect(() => {
-      Api.get('books').then(resp => {
-         setBooks(resp.data);
-      }).catch(error => {
-         console.log(error);
-      });
-   }, [])
+      Api.get('books')
+         .then(resp => {
+            setBooks(resp.data);
+         })
+         .catch(error => {
+            console.log(error);
+         });
+   }, []);
 
    useEffect(() => {
       if (state) {
          setLivroId(state);
-         setModalAtivado(true)
+         setModalAtivado(true);
       }
-   }, [state])
+   }, [state]);
 
    function abrirModal(livroId: number | string) {
       setLivroId(livroId);
@@ -40,58 +45,60 @@ const BibliotecaForm = () => {
 
    function pesquisar(event: any) {
       event.preventDefault();
-      setFiltro(opcao)
+      setFiltro(opcao);
       setPesquisa(texto);
    }
 
    function criarElementoLivro(livro: Livro) {
       return (
-         <BibliotecaItem onClick={() => { abrirModal(livro.id) }} key={livro.id}>
+         <BibliotecaItem
+            onClick={() => {
+               abrirModal(livro.id);
+            }}
+            key={livro.id}
+         >
             <img src={`http://localhost:3000/upload/${livro.image}`} alt={`Capa do livro ${livro.title}`} />
             <p>{livro.title}</p>
          </BibliotecaItem>
-      )
+      );
    }
 
    return (
-      <ContainerGeral>
-         <VoltarPraHome>
-            <p>
-               <LinkParaHome to='/home'>
-                  <SetaEsquerda /> Home
-               </LinkParaHome> / <b>Biblioteca</b>
-            </p>
-         </VoltarPraHome>
+      <ContainerGeral data-testid={'BibliotecaForm'}>
+         <VoltarParaHome pagina={'Biblioteca'} />
 
          <PesquisaContainer>
             <PesquisaForm onSubmit={pesquisar}>
-               <LupaImg />
+               <img src={Lupa} alt="" />
                <input
-                  id='pesquisaInput'
+                  data-testid={'BibliotecaInput'}
+                  id="pesquisaInput"
                   value={texto}
                   onChange={(texto: ChangeEvent<HTMLInputElement>) => setTexto(texto.target.value)}
-                  placeholder='Pesquisar livro...'
+                  placeholder="Pesquisar livro..."
                />
-               <Button onClick={pesquisar} id='biblioteca-botao-pesquisar'>Buscar</Button>
+               <Button onClick={pesquisar} id="biblioteca-botao-pesquisar">
+                  Buscar
+               </Button>
             </PesquisaForm>
 
             <TextField
                select
-               label='Buscar por:'
+               label="Buscar por:"
                value={opcao}
-               onChange={(opcao) => setOpcao(opcao.target.value)}
+               onChange={opcao => setOpcao(opcao.target.value)}
                sx={{
-                  "& .MuiInputBase-root": {
-                     width: 200
+                  '& .MuiInputBase-root': {
+                     width: 200,
                   },
                   '& .MuiOutlinedInput-root': {
                      '& fieldset': {
-                        borderColor: '#ADB5BD'
-                     }
-                  }
+                        borderColor: '#ADB5BD',
+                     },
+                  },
                }}
             >
-               {options.map((option) => (
+               {options.map(option => (
                   <MenuItem key={option} value={option}>
                      {option}
                   </MenuItem>
@@ -101,41 +108,43 @@ const BibliotecaForm = () => {
 
          <BibliotecaItensContainer>
             {modalAtivado && <Modal setModalAtivado={setModalAtivado} livroId={livroId} />}
-            {!books ?
-               <p id='bibliotecaCarregandoInfo'>Carregando informações...</p>
-               :
-               books.map((livro) => {
+            {!books ? (
+               <p id="bibliotecaCarregandoInfo">Carregando informações...</p>
+            ) : (
+               books.map(livro => {
                   switch (filtro) {
                      case '':
                         if (livro.title.toLowerCase().includes(pesquisa.toLowerCase())) {
-                           return (criarElementoLivro(livro))
+                           return criarElementoLivro(livro);
                         }
                         break;
                      case 'Título':
                         if (livro.title.toLowerCase().includes(pesquisa.toLowerCase())) {
-                           return (criarElementoLivro(livro))
+                           return criarElementoLivro(livro);
                         }
                         break;
                      case 'Gênero':
                         if (livro.genre.toLowerCase().includes(pesquisa.toLowerCase())) {
-                           return (criarElementoLivro(livro))
+                           return criarElementoLivro(livro);
                         }
                         break;
                      case 'Autor':
                         if (livro.author.toLowerCase().includes(pesquisa.toLowerCase())) {
-                           return (criarElementoLivro(livro))
+                           return criarElementoLivro(livro);
                         }
                         break;
                      case 'Data de entrada':
                         if (livro.systemEntryDate.includes(pesquisa)) {
-                           return (criarElementoLivro(livro))
+                           return criarElementoLivro(livro);
                         }
                         break;
-                  } return null;
-               })}
+                  }
+                  return null;
+               })
+            )}
          </BibliotecaItensContainer>
-      </ContainerGeral >
-   )
-}
+      </ContainerGeral>
+   );
+};
 
-export default BibliotecaForm
+export default BibliotecaForm;

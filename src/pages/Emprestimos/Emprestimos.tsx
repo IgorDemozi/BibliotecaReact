@@ -1,6 +1,6 @@
-import Header from 'Componentes/Header/Header'
-import { MainContainer } from 'pages/pages.styles'
-import EmprestimosForm from './EmprestimosForm'
+import Header from '../../Componentes/Header/Header';
+import { MainContainer } from '../pages.styles';
+import EmprestimosForm from './EmprestimosForm';
 
 const Emprestimos = () => {
    return (
@@ -8,7 +8,7 @@ const Emprestimos = () => {
          <Header />
          <EmprestimosForm />
       </MainContainer>
-   )
-}
+   );
+};
 
-export default Emprestimos
+export default Emprestimos;

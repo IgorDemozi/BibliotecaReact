@@ -1,6 +1,6 @@
-import Header from 'Componentes/Header/Header'
-import { MainContainer } from 'pages/pages.styles'
-import BibliotecaForm from './BibliotecaForm'
+import Header from '../../Componentes/Header/Header';
+import { MainContainer } from '../pages.styles';
+import BibliotecaForm from './BibliotecaForm';
 
 const Biblioteca = () => {
    return (
@@ -8,7 +8,7 @@ const Biblioteca = () => {
          <Header />
          <BibliotecaForm />
       </MainContainer>
-   )
-}
+   );
+};
 
-export default Biblioteca
+export default Biblioteca;

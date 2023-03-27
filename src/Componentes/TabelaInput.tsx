@@ -7,10 +7,10 @@ const BotaoOrdenar = styled.img`
    position: absolute;
    z-index: 100;
    cursor: pointer;
-`
+`;
 
 const DivInputTabela = styled.div`
-   #tbl-Inpt{
+   .tabelaInput {
       border: none;
       border-bottom: 0.125rem solid black;
       width: 75%;
@@ -21,22 +21,16 @@ const DivInputTabela = styled.div`
          outline: none;
       }
    }
-`
+`;
 
 const TabelaInput = ({ value, onChange, onClick, maxLength }: InputProps) => {
    return (
       <DivInputTabela>
          <BotaoOrdenar src={Filtro} onClick={onClick} />
 
-         <Input
-            id='tbl-Inpt'
-            type='text'
-            value={value}
-            onChange={onChange}
-            maxLength={maxLength}
-         />
+         <Input className="tabelaInput" type="text" value={value} onChange={onChange} maxLength={maxLength} />
       </DivInputTabela>
-   )
-}
+   );
+};
 
-export default TabelaInput
+export default TabelaInput;

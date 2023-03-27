@@ -1,22 +1,13 @@
 import styled from 'styled-components';
 import Filtro from 'assets/Caminho_147.svg';
 
-export const Cabecalho = styled.header`
-   background-color: white;
-   height: 96px;
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   padding: 0 2rem;
-`
-
 export const Tabela = styled.table`
    border-collapse: collapse;
    width: 90%;
    margin: 1.5rem;
 
    th {
-      background: #FFC501;
+      background: #ffc501;
       height: 2em;
       text-align: left;
       padding-left: 2rem;
@@ -31,7 +22,7 @@ export const Tabela = styled.table`
    }
 
    td {
-      border-bottom: 1px solid #CDCDCD;
+      border-bottom: 1px solid #cdcdcd;
       padding: 10px;
       text-align: left;
       padding-left: 2rem;
@@ -52,7 +43,7 @@ export const Tabela = styled.table`
       height: 40px;
    }
 
-   .tabelaInput{
+   /* .tabelaInput {
       border: none;
       border-bottom: 2px solid black;
       width: 75%;
@@ -65,5 +56,5 @@ export const Tabela = styled.table`
       :focus {
          outline: none;
       }
-   }
-`
+   } */
+`;

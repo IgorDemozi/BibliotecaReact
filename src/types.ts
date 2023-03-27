@@ -8,35 +8,36 @@ export type Livro = {
    systemEntryDate: string;
    synopsis: string;
    rentHistory: RentHistory[];
-}
+};
 
 export type RentHistory = {
    studentName: string;
    class: string;
    title?: string;
    withdrawalDate: string;
-   deliveryDate: string
-}
+   deliveryDate: string;
+};
 
 export type Status = {
    isRented: boolean;
    isActive: boolean;
    description: string;
-}
+};
 
 export type Usuario = {
    email: string;
    password: string;
-}
+};
 
 export type Autenticacao = {
    auth?: boolean;
    error?: string;
-}
+};
 
 export interface InputProps {
    type?: string;
    id?: string;
+   className?: string;
    value: string;
    onChange: any;
    onClick?: any;
@@ -48,7 +49,8 @@ export interface CardInterface {
    txt: string;
    rota: string;
    alt: string;
-   imagem: string
+   imagem: string;
+   dataTestId?: string;
 }
 
 export interface ModalProps {

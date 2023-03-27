@@ -1,6 +1,4 @@
-import React, { useState, ChangeEvent, useEffect, useReducer, useRef } from 'react'
-import { LinkParaHome, VoltarPraHome, ContainerGeral, SetaEsquerda } from 'pages/pages.styles'
-import { Livro, RentHistory } from 'types'
+import React, { useState, ChangeEvent, useEffect, useReducer, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,8 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import TabelaInput from 'Componentes/TabelaInput';
-import { Api } from 'api';
+
+import TabelaInput from '../../Componentes/TabelaInput';
+import VoltarParaHome from '../../Componentes/VoltarParaHome';
+import { Api } from '../../api';
+import { ContainerGeral } from '../pages.styles';
+import { Livro, RentHistory } from 'types';
 
 const StyledTableCell = styled(TableCell)(() => ({
    [`&.${tableCellClasses.head}`]: {
@@ -25,7 +27,7 @@ const StyledTableCell = styled(TableCell)(() => ({
 
       '&:last-of-type': {
          borderRadius: '0 0.25rem 0 0',
-      }
+      },
    },
    [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
@@ -40,7 +42,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
    '&:last-child td, &:last-child th': {
       border: 0,
       borderRadius: '0.25rem 0 0 0',
-      boxShadow: '0'
+      boxShadow: '0',
    },
 }));
 
@@ -69,21 +71,21 @@ const EmprestimosForm = () => {
                      class: rent.class,
                      studentName: rent.studentName,
                      withdrawalDate: rent.withdrawalDate,
-                     deliveryDate: rent.deliveryDate
+                     deliveryDate: rent.deliveryDate,
                   };
-                  lista.push(emprestimo)
-               })
-            })
+                  lista.push(emprestimo);
+               });
+            });
             setListaFinal(lista);
          })
          .catch(error => {
             console.log(error);
          });
-   }, [])
+   }, []);
 
    function ordenarLista(lista: RentHistory[], campo: string, id: number): void {
       if (id !== identificador.current) asc.current = true;
-      let field = campo as keyof RentHistory
+      let field = campo as keyof RentHistory;
 
       if (asc.current && (field === 'withdrawalDate' || field === 'deliveryDate')) {
          lista.sort(function (a, b) {
@@ -93,7 +95,7 @@ const EmprestimosForm = () => {
             let dataB = new Date(anoMesDiaB[0], anoMesDiaB[1] - 1, anoMesDiaB[2]);
 
             return dataA.valueOf() - dataB.valueOf();
-         })
+         });
       } else if (field === 'withdrawalDate' || field === 'deliveryDate') {
          lista.sort((b, a) => {
             let anoMesDiaA = a[field]!.split('/').reverse().map(Number);
@@ -102,35 +104,29 @@ const EmprestimosForm = () => {
             let dataB = new Date(anoMesDiaB[0], anoMesDiaB[1] - 1, anoMesDiaB[2]);
 
             return dataA.valueOf() - dataB.valueOf();
-         })
+         });
       } else if (asc.current) {
-         lista.sort((a, b) => a[field]!.localeCompare(b[field]!))
+         lista.sort((a, b) => a[field]!.localeCompare(b[field]!));
       } else {
-         lista.sort((b, a) => a[field]!.localeCompare(b[field]!))
+         lista.sort((b, a) => a[field]!.localeCompare(b[field]!));
       }
 
       setListaFinal(lista);
-      asc.current = !asc.current
+      asc.current = !asc.current;
       identificador.current = id;
       forceUpdate();
    }
 
    return (
-      <ContainerGeral>
-         <VoltarPraHome>
-            <p>
-               <LinkParaHome to='/home'>
-                  <SetaEsquerda /> Home
-               </LinkParaHome> / <b>Histórico de Empréstimos</b>
-            </p>
-         </VoltarPraHome>
+      <ContainerGeral data-testid={'emprestimos'}>
+         <VoltarParaHome pagina={'Histórico de Empréstimos'} />
 
          <TableContainer
             sx={{
                display: 'flex',
                alignItems: 'center',
                borderRadius: '0',
-               boxShadow: '0'
+               boxShadow: '0',
             }}
             component={Paper}
          >
@@ -146,54 +142,57 @@ const EmprestimosForm = () => {
                </TableHead>
 
                <TableBody>
-                  <StyledTableRow >
+                  <StyledTableRow>
                      <StyledTableCell component="th" scope="row">
                         <TabelaInput
                            value={aluno}
-                           onClick={() => { ordenarLista(listaFinal, 'studentName', 1); }}
-                           onChange={
-                              (aluno: ChangeEvent<HTMLInputElement>) => setAluno(aluno.target.value)
-                           } />
+                           onClick={() => {
+                              ordenarLista(listaFinal, 'studentName', 1);
+                           }}
+                           onChange={(aluno: ChangeEvent<HTMLInputElement>) => setAluno(aluno.target.value)}
+                        />
                      </StyledTableCell>
                      <StyledTableCell>
                         <TabelaInput
                            value={turma}
-                           onClick={() => { ordenarLista(listaFinal, 'class', 2) }}
-                           onChange={
-                              (turma: ChangeEvent<HTMLInputElement>) => setTurma(turma.target.value)
-                           } />
+                           onClick={() => {
+                              ordenarLista(listaFinal, 'class', 2);
+                           }}
+                           onChange={(turma: ChangeEvent<HTMLInputElement>) => setTurma(turma.target.value)}
+                        />
                      </StyledTableCell>
                      <StyledTableCell>
                         <TabelaInput
                            value={titulo}
-                           onClick={() => { ordenarLista(listaFinal, 'title', 3) }}
-                           onChange={
-                              (titulo: ChangeEvent<HTMLInputElement>) => setTitulo(titulo.target.value)
-                           } />
+                           onClick={() => {
+                              ordenarLista(listaFinal, 'title', 3);
+                           }}
+                           onChange={(titulo: ChangeEvent<HTMLInputElement>) => setTitulo(titulo.target.value)}
+                        />
                      </StyledTableCell>
                      <StyledTableCell>
                         <TabelaInput
                            value={retirada}
-                           onClick={() => { ordenarLista(listaFinal, 'withdrawalDate', 4) }}
-                           onChange={
-                              (retirada: ChangeEvent<HTMLInputElement>) => setRetirada(retirada.target.value)
-                           }
+                           onClick={() => {
+                              ordenarLista(listaFinal, 'withdrawalDate', 4);
+                           }}
+                           onChange={(retirada: ChangeEvent<HTMLInputElement>) => setRetirada(retirada.target.value)}
                            maxLength={10}
                         />
                      </StyledTableCell>
                      <StyledTableCell>
                         <TabelaInput
                            value={entrega}
-                           onClick={() => { ordenarLista(listaFinal, 'deliveryDate', 5) }}
-                           onChange={
-                              (entrega: ChangeEvent<HTMLInputElement>) => setEntrega(entrega.target.value)
-                           }
+                           onClick={() => {
+                              ordenarLista(listaFinal, 'deliveryDate', 5);
+                           }}
+                           onChange={(entrega: ChangeEvent<HTMLInputElement>) => setEntrega(entrega.target.value)}
                            maxLength={10}
                         />
                      </StyledTableCell>
                   </StyledTableRow>
 
-                  {!books ?
+                  {!books ? (
                      <StyledTableRow>
                         <StyledTableCell></StyledTableCell>
                         <StyledTableCell></StyledTableCell>
@@ -201,36 +200,35 @@ const EmprestimosForm = () => {
                         <StyledTableCell></StyledTableCell>
                         <StyledTableCell></StyledTableCell>
                      </StyledTableRow>
-                     :
-                     listaFinal && listaFinal.map((element, index) => {
+                  ) : (
+                     listaFinal &&
+                     listaFinal.map((element, index) => {
                         return (
                            <React.Fragment key={index}>
                               {element.studentName.toLowerCase().includes(aluno.toLowerCase()) &&
-                                 element.class.toLowerCase().includes(turma.toLowerCase()) &&
-                                 element.title!.toLowerCase().includes(titulo.toLowerCase()) &&
-                                 element.withdrawalDate.toLowerCase().includes(retirada.toLowerCase()) &&
-                                 element.deliveryDate.toLowerCase().includes(entrega.toLowerCase()) ?
+                              element.class.toLowerCase().includes(turma.toLowerCase()) &&
+                              element.title!.toLowerCase().includes(titulo.toLowerCase()) &&
+                              element.withdrawalDate.toLowerCase().includes(retirada.toLowerCase()) &&
+                              element.deliveryDate.toLowerCase().includes(entrega.toLowerCase()) ? (
                                  <StyledTableRow>
                                     <StyledTableCell component="th" scope="row">
                                        {element.studentName}
                                     </StyledTableCell>
                                     <StyledTableCell>{element.class}</StyledTableCell>
                                     <StyledTableCell>{element.title}</StyledTableCell>
-                                    <StyledTableCell>{element.withdrawalDate}
-                                    </StyledTableCell>
-                                    <StyledTableCell>{element.deliveryDate}
-                                    </StyledTableCell>
+                                    <StyledTableCell>{element.withdrawalDate}</StyledTableCell>
+                                    <StyledTableCell>{element.deliveryDate}</StyledTableCell>
                                  </StyledTableRow>
-                                 : null}
+                              ) : null}
                            </React.Fragment>
-                        )
+                        );
                      })
-                  }
+                  )}
                </TableBody>
             </Table>
          </TableContainer>
-      </ContainerGeral >
-   )
-}
+      </ContainerGeral>
+   );
+};
 
-export default EmprestimosForm
+export default EmprestimosForm;

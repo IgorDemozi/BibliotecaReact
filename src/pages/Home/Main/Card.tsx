@@ -1,13 +1,12 @@
-import CardMUI from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
-import { CardInterface } from 'types'
-import { CardLink } from './Card.styles'
+import CardMUI from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import { CardInterface } from 'types';
+import { CardLink } from './Card.styles';
 
-const Card = ({ txt, rota, alt, imagem }: CardInterface) => {
-
+const Card = ({ txt, rota, alt, imagem, dataTestId }: CardInterface) => {
    return (
-      <CardLink to={rota}>
+      <CardLink to={rota} data-testid={dataTestId}>
          <CardMUI
             sx={{
                width: 250,
@@ -17,39 +16,35 @@ const Card = ({ txt, rota, alt, imagem }: CardInterface) => {
                alignItems: 'center',
                backgroundColor: '#e6e6e6',
                '&:hover': {
-                  backgroundColor: "#FFC501"
-               }
-            }}>
-
+                  backgroundColor: '#FFC501',
+               },
+            }}
+         >
             <CardContent
-               component='div'
+               component="div"
                sx={{
                   height: '7.5rem',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
-               }}>
-
-               <CardMedia
-                  component='img'
-                  sx={{ width: '2.875rem' }}
-                  image={imagem}
-                  alt={alt}
-               />
+                  justifyContent: 'center',
+               }}
+            >
+               <CardMedia component="img" sx={{ width: '2.875rem' }} image={imagem} alt={alt} />
             </CardContent>
 
             <CardContent
-               component='div'
-               id='div-do-paragrafo'
+               component="div"
+               id="div-do-paragrafo"
                sx={{
                   backgroundColor: 'white',
-                  width: 240
-               }}>
+                  width: 240,
+               }}
+            >
                <p>{txt}</p>
             </CardContent>
          </CardMUI>
       </CardLink>
-   )
-}
+   );
+};
 
-export default Card
+export default Card;

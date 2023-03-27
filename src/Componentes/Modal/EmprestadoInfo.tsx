@@ -1,5 +1,5 @@
 import { Livro } from 'types';
-import { EmprestadoInfoSection } from 'Componentes/Modal/Modal.styles';
+import { EmprestadoInfoSection } from './Modal.styles';
 
 const EmprestadoInfo = ({ livro }: { livro: Livro }) => {
    const emprestimo = livro.rentHistory[Object.keys(livro.rentHistory).length - 1];
@@ -8,7 +8,7 @@ const EmprestadoInfo = ({ livro }: { livro: Livro }) => {
       <EmprestadoInfoSection>
          <h1>Dados do aluno</h1>
 
-         <div id='container'>
+         <div id="container">
             <div>
                <h2>Nome do aluno</h2>
                <p>{emprestimo.studentName}</p>
@@ -30,7 +30,7 @@ const EmprestadoInfo = ({ livro }: { livro: Livro }) => {
             </div>
          </div>
       </EmprestadoInfoSection>
-   )
-}
+   );
+};
 
-export default EmprestadoInfo
+export default EmprestadoInfo;

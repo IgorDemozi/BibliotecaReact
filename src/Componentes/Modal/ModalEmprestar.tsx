@@ -1,14 +1,15 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
-import { EmprestarInputsContainer, MenuEmprestar } from './ModalEmprestar.styles'
-import { DivFechar } from './Modal.styles'
-import { BotaoEmprestar } from './ModalLivro.styles'
-import { TextfieldCadastro } from 'pages/Cadastro/CadastroForm.styles'
-import Fechar from 'assets/Caminho_265.svg'
-import { useFormik } from 'formik'
-import * as yup from 'yup'
-import { ModalProps, RentHistory } from 'types'
-import { Api } from 'api'
-import { isBefore } from 'date-fns'
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { isBefore } from 'date-fns';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+
+import { DivFechar } from './Modal.styles';
+import { BotaoEmprestar } from './ModalLivro.styles';
+import Fechar from 'assets/Caminho_265.svg';
+import { ModalProps, RentHistory } from 'types';
+import { Api } from '../../api';
+import { TextfieldCadastro } from '../../pages/Cadastro/CadastroForm.styles';
+import { EmprestarInputsContainer, MenuEmprestar } from './ModalEmprestar.styles';
 
 const ModalEmprestar = ({ livroId, setEmprestarAtivado, setModalLivroAtivado }: ModalProps) => {
    const [shrinkAluno, setShrinkAluno] = useState(false);
@@ -17,10 +18,10 @@ const ModalEmprestar = ({ livroId, setEmprestarAtivado, setModalLivroAtivado }: 
 
    useEffect(() => {
       let hoje = new Date();
-      let dataHoje: string = (hoje.getMonth() + 1) + '/' + hoje.getDate() + '/' + hoje.getFullYear();
+      let dataHoje: string = hoje.getMonth() + 1 + '/' + hoje.getDate() + '/' + hoje.getFullYear();
       let dia = new Date(dataHoje);
       diaHoje.current = dia;
-   }, [])
+   }, []);
 
    function inputDateHandleChange(event: ChangeEvent<HTMLInputElement>) {
       let anoMesDia = event.target.value.split('-').map(Number);
@@ -37,7 +38,7 @@ const ModalEmprestar = ({ livroId, setEmprestarAtivado, setModalLivroAtivado }: 
       aluno: yup.string().required('Este campo é obrigatório'),
       turma: yup.string().required('Este campo é obrigatório'),
       retirada: yup.string().required('Este campo é obrigatório'),
-      devolucao: yup.string().required('Este campo é obrigatório')
+      devolucao: yup.string().required('Este campo é obrigatório'),
    });
 
    const formik = useFormik({
@@ -45,13 +46,13 @@ const ModalEmprestar = ({ livroId, setEmprestarAtivado, setModalLivroAtivado }: 
          aluno: '',
          turma: '',
          retirada: '',
-         devolucao: ''
+         devolucao: '',
       },
       validationSchema: validationSchema,
       onSubmit: () => {
          salvar();
          voltar();
-      }
+      },
    });
 
    function voltar() {
@@ -65,42 +66,48 @@ const ModalEmprestar = ({ livroId, setEmprestarAtivado, setModalLivroAtivado }: 
       let historicoDeEmprestimos: RentHistory = {
          studentName: formik.values.aluno,
          class: formik.values.turma,
-         withdrawalDate: formik.values.retirada.split("-").reverse().join("/"),
-         deliveryDate: formik.values.devolucao.split("-").reverse().join("/")
+         withdrawalDate: formik.values.retirada.split('-').reverse().join('/'),
+         deliveryDate: formik.values.devolucao.split('-').reverse().join('/'),
       };
 
-      Api.patch(`/biblioteca/emprestar/${livroId}`, historicoDeEmprestimos).then(resp => {
-         alert('Informações salvas com sucesso!');
-      }).catch(error => {
-         console.log(error);
-         alert(error.response.data.error);
-      });
+      Api.patch(`/biblioteca/emprestar/${livroId}`, historicoDeEmprestimos)
+         .then(resp => {
+            alert('Informações salvas com sucesso!');
+         })
+         .catch(error => {
+            console.log(error);
+            alert(error.response.data.error);
+         });
    }
 
    return (
       <MenuEmprestar onSubmit={formik.handleSubmit}>
          <DivFechar>
             <h1>Informe os dados do aluno antes de continuar</h1>
-            <img onClick={voltar} src={Fechar} alt='Fechar' />
+            <img onClick={voltar} src={Fechar} alt="Fechar" />
          </DivFechar>
 
          <EmprestarInputsContainer>
             <TextfieldCadastro
-               type='text'
-               name='aluno'
-               label='Nome do aluno'
+               type="text"
+               name="aluno"
+               label="Nome do aluno"
                inputProps={{
                   style: {
-                     height: "1rem",
-                     width: 285
-                  }
+                     height: '1rem',
+                     width: 285,
+                  },
                }}
                InputLabelProps={{
                   shrink: shrinkAluno,
-                  style: shrinkAluno ? undefined : { transform: 'translate(1rem, 0.75rem)' }
+                  style: shrinkAluno ? undefined : { transform: 'translate(1rem, 0.75rem)' },
                }}
-               onFocus={() => { setShrinkAluno(true) }}
-               onBlur={() => { if (formik.values.aluno.length === 0) setShrinkAluno(false) }}
+               onFocus={() => {
+                  setShrinkAluno(true);
+               }}
+               onBlur={() => {
+                  if (formik.values.aluno.length === 0) setShrinkAluno(false);
+               }}
                value={formik.values.aluno}
                onChange={formik.handleChange}
                error={formik.touched.aluno && Boolean(formik.errors.aluno)}
@@ -108,27 +115,31 @@ const ModalEmprestar = ({ livroId, setEmprestarAtivado, setModalLivroAtivado }: 
                FormHelperTextProps={{
                   style: {
                      position: 'absolute',
-                     transform: 'translate(9.6rem, 2.8rem)'
-                  }
+                     transform: 'translate(9.6rem, 2.8rem)',
+                  },
                }}
             />
 
             <TextfieldCadastro
-               type='text'
-               name='turma'
-               label='Turma'
+               type="text"
+               name="turma"
+               label="Turma"
                inputProps={{
                   style: {
-                     height: "1rem",
-                     width: 285
-                  }
+                     height: '1rem',
+                     width: 285,
+                  },
                }}
                InputLabelProps={{
                   shrink: shrinkTurma,
-                  style: shrinkTurma ? undefined : { transform: 'translate(1rem, 0.75rem)' }
+                  style: shrinkTurma ? undefined : { transform: 'translate(1rem, 0.75rem)' },
                }}
-               onFocus={() => { setShrinkTurma(true) }}
-               onBlur={() => { if (formik.values.turma.length === 0) setShrinkTurma(false) }}
+               onFocus={() => {
+                  setShrinkTurma(true);
+               }}
+               onBlur={() => {
+                  if (formik.values.turma.length === 0) setShrinkTurma(false);
+               }}
                value={formik.values.turma}
                onChange={formik.handleChange}
                error={formik.touched.turma && Boolean(formik.errors.turma)}
@@ -136,20 +147,20 @@ const ModalEmprestar = ({ livroId, setEmprestarAtivado, setModalLivroAtivado }: 
                FormHelperTextProps={{
                   style: {
                      position: 'absolute',
-                     transform: 'translate(9.6rem, 2.8rem)'
-                  }
+                     transform: 'translate(9.6rem, 2.8rem)',
+                  },
                }}
             />
 
             <TextfieldCadastro
-               type='date'
-               name='retirada'
-               label='Data de retirada'
+               type="date"
+               name="retirada"
+               label="Data de retirada"
                inputProps={{
                   style: {
-                     height: "1rem",
-                     width: 285
-                  }
+                     height: '1rem',
+                     width: 285,
+                  },
                }}
                InputLabelProps={{ shrink: true }}
                value={formik.values.retirada}
@@ -159,20 +170,20 @@ const ModalEmprestar = ({ livroId, setEmprestarAtivado, setModalLivroAtivado }: 
                FormHelperTextProps={{
                   style: {
                      position: 'absolute',
-                     transform: 'translate(9.6rem, 2.8rem)'
-                  }
+                     transform: 'translate(9.6rem, 2.8rem)',
+                  },
                }}
             />
 
             <TextfieldCadastro
-               type='date'
-               name='devolucao'
-               label='Data de devolução'
+               type="date"
+               name="devolucao"
+               label="Data de devolução"
                inputProps={{
                   style: {
-                     height: "1rem",
-                     width: 285
-                  }
+                     height: '1rem',
+                     width: 285,
+                  },
                }}
                InputLabelProps={{ shrink: true }}
                value={formik.values.devolucao}
@@ -182,15 +193,15 @@ const ModalEmprestar = ({ livroId, setEmprestarAtivado, setModalLivroAtivado }: 
                FormHelperTextProps={{
                   style: {
                      position: 'absolute',
-                     transform: 'translate(9.6rem, 2.8rem)'
-                  }
+                     transform: 'translate(9.6rem, 2.8rem)',
+                  },
                }}
             />
          </EmprestarInputsContainer>
 
-         <BotaoEmprestar type='submit'>Emprestar</BotaoEmprestar>
+         <BotaoEmprestar type="submit">Emprestar</BotaoEmprestar>
       </MenuEmprestar>
-   )
-}
+   );
+};
 
-export default ModalEmprestar
+export default ModalEmprestar;
